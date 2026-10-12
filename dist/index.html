@@ -1,43 +1,157 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#070613"><meta name="description" content="Приглашение на 23-й день рождения Тани. 15 ноября — сохрани дату, выбирай casual chic и готовься к празднику.">
 <title>Happy Tanya’s Birthday — 15 ноября</title>
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=4">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Great+Vibes&family=Manrope:wght@300;400;500;600&display=swap">
+<link rel="preload" as="image" href="assets/hero.webp" fetchpriority="high">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
-<body>
+<body class="is-locked">
+
+<div class="curtain" aria-hidden="true"><div class="curtain-half curtain-left"></div><div class="curtain-half curtain-right"></div><div class="curtain-valance"></div></div>
+<canvas class="fx-canvas" aria-hidden="true"></canvas>
+
 <dialog id="welcome" class="welcome" aria-labelledby="welcome-title">
 <form id="name-form" class="welcome-card">
-<span class="welcome-star" aria-hidden="true">✦</span><p class="eyebrow">У тебя персональное приглашение</p>
-<h2 id="welcome-title">Привет!<br>Как тебя зовут?</h2><label for="visitor-name">Твоё имя</label>
+<span class="welcome-star" aria-hidden="true">✦</span>
+<p class="eyebrow">У тебя персональное приглашение</p>
+<h2 id="welcome-title"><span>Привет!</span><br><span>Как тебя зовут?</span></h2>
+<label for="visitor-name">Твоё имя</label>
 <input id="visitor-name" name="name" placeholder="Например, Маша" maxlength="32" autocomplete="given-name" required>
 <fieldset><legend>Как к тебе обращаться?</legend><label><input type="radio" name="salutation" value="Дорогая" checked> Дорогая</label><label><input type="radio" name="salutation" value="Дорогой"> Дорогой</label></fieldset>
-<button class="pink-button" type="submit">Войти на праздник <span>↗</span></button><p class="welcome-note">Твоё имя — твой счастливый билет ♡</p>
-</form></dialog>
-<header class="header"><a class="brand" href="#home" aria-label="В начало">Tanya’s <span>Birthday</span><i>✦</i></a><button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="navigation">Меню <span>☰</span></button><nav id="navigation" aria-label="Разделы приглашения"><a href="#invitation">Приглашение</a><a href="#date">15 ноября</a><a href="#dress-code">Dress code</a><a href="#wishlist">Вишлист <span>♡</span></a></nav></header>
+<button class="pink-button" type="submit">Войти на праздник <span aria-hidden="true">↗</span></button>
+<p class="welcome-note">Твоё имя — твой счастливый билет ♡</p>
+</form>
+</dialog>
+
+<header class="header">
+<a class="brand" href="#home" aria-label="В начало">Tanya’s <span>Birthday</span><i aria-hidden="true">✦</i></a>
+<button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="navigation">Меню <span aria-hidden="true">☰</span></button>
+<nav id="navigation" aria-label="Разделы приглашения"><a href="#invitation">Приглашение</a><a href="#date">15 ноября</a><a href="#dress-code">Dress code</a><a href="#wishlist">Вишлист <span aria-hidden="true">♡</span></a></nav>
+<span class="progress" aria-hidden="true"></span>
+</header>
+
 <main>
-<section id="home" class="scene hero" aria-labelledby="hero-title"><div class="ambient ambient-home" aria-hidden="true"><span class="ambient-item" style="--left:10%;--top:46%;--delay:-0.0s;--duration:5s">✦</span><span class="ambient-item" style="--left:84%;--top:32%;--delay:-1.7s;--duration:6s">✧</span><span class="ambient-item" style="--left:65%;--top:60%;--delay:-3.4s;--duration:7s">·</span><span class="ambient-item" style="--left:42%;--top:75%;--delay:-5.1s;--duration:8s">✦</span><span class="light-wash wash-one"></span><span class="light-wash wash-two"></span><span class="light-streak"></span><span class="ambient-item particle" style="--left:5%;--top:15%;--delay:-0.0s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:28%;--top:32%;--delay:-0.8s;--duration:7s">·</span><span class="ambient-item particle" style="--left:51%;--top:49%;--delay:-1.6s;--duration:8s">·</span><span class="ambient-item particle" style="--left:74%;--top:66%;--delay:-2.4000000000000004s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:6%;--top:83%;--delay:-3.2s;--duration:10s">·</span><span class="ambient-item particle" style="--left:29%;--top:22%;--delay:-4.0s;--duration:11s">·</span><span class="ambient-item particle" style="--left:52%;--top:39%;--delay:-4.800000000000001s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:75%;--top:56%;--delay:-5.6000000000000005s;--duration:7s">·</span><span class="ambient-item particle" style="--left:7%;--top:73%;--delay:-6.4s;--duration:8s">·</span><span class="ambient-item particle" style="--left:30%;--top:90%;--delay:-7.2s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:53%;--top:29%;--delay:-8.0s;--duration:10s">·</span><span class="ambient-item particle" style="--left:76%;--top:46%;--delay:-8.8s;--duration:11s">·</span></div>
+<section id="home" class="scene hero" aria-labelledby="hero-title">
 <h1 id="hero-title" class="sr-only">Happy Tanya’s Birthday</h1>
+<div class="stage"><div class="stage-inner"><div class="stage-layer">
 <img class="art" src="assets/hero.webp" width="1920" height="1080" alt="Happy Tanya’s Birthday. В жизни нужно играть только главную роль. Звёздное небо, неоновые огни и коктейль на розовом столе." fetchpriority="high">
+<div class="fx" aria-hidden="true">
+<span class="beam beam-1"></span><span class="beam beam-2"></span><span class="beam beam-3"></span>
+<div class="twinkles"></div>
+<span class="shooting shooting-1"></span><span class="shooting shooting-2"></span><span class="shooting shooting-3"></span>
+<span class="flare" style="--x:30.4%;--y:42.8%;--s:9%"></span>
+<span class="flare" style="--x:72.4%;--y:54.3%;--s:7.5%;--d:-1.6s"></span>
+<span class="glass-glow"></span>
+<div class="bubbles"></div>
+<span class="sheen sheen-title"></span>
+<span class="spotlight"></span>
+</div>
+</div></div>
+<div class="sparkles" data-symbols="✦ ✧ · ✦" aria-hidden="true"></div>
+<a class="scroll-link" href="#invitation"><span class="scroll-text">Твоё приглашение</span> <span class="scroll-arrow" aria-hidden="true">↓</span></a>
+</div>
 <div class="mobile-copy"><p class="eyebrow">15 ноября · 23-й день рождения</p><h2>Happy Tanya’s<br><em>Birthday</em></h2><p>В жизни нужно играть только главную роль</p></div>
-<span class="floating-star star-one" aria-hidden="true">✦</span><span class="floating-star star-two" aria-hidden="true">✧</span><a class="scroll-link" href="#invitation">Твоё приглашение <span>↓</span></a>
 </section>
-<section id="invitation" class="scene invitation" aria-labelledby="invite-title"><div class="ambient ambient-invitation" aria-hidden="true"><span class="ambient-item" style="--left:12%;--top:65%;--delay:-0.0s;--duration:5s">♠</span><span class="ambient-item" style="--left:88%;--top:68%;--delay:-1.7s;--duration:6s">✧</span><span class="ambient-item" style="--left:16%;--top:18%;--delay:-3.4s;--duration:7s">✦</span><span class="ambient-item" style="--left:93%;--top:18%;--delay:-5.1s;--duration:8s">♣</span><span class="light-wash wash-one"></span><span class="light-wash wash-two"></span><span class="light-streak"></span><span class="ambient-item particle" style="--left:5%;--top:15%;--delay:-0.0s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:28%;--top:32%;--delay:-0.8s;--duration:7s">·</span><span class="ambient-item particle" style="--left:51%;--top:49%;--delay:-1.6s;--duration:8s">·</span><span class="ambient-item particle" style="--left:74%;--top:66%;--delay:-2.4000000000000004s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:6%;--top:83%;--delay:-3.2s;--duration:10s">·</span><span class="ambient-item particle" style="--left:29%;--top:22%;--delay:-4.0s;--duration:11s">·</span><span class="ambient-item particle" style="--left:52%;--top:39%;--delay:-4.800000000000001s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:75%;--top:56%;--delay:-5.6000000000000005s;--duration:7s">·</span><span class="ambient-item particle" style="--left:7%;--top:73%;--delay:-6.4s;--duration:8s">·</span><span class="ambient-item particle" style="--left:30%;--top:90%;--delay:-7.2s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:53%;--top:29%;--delay:-8.0s;--duration:10s">·</span><span class="ambient-item particle" style="--left:76%;--top:46%;--delay:-8.8s;--duration:11s">·</span></div>
-<h2 id="invite-title" class="sr-only">Твоё персональное приглашение</h2><div class="art-wrap machine">
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track"><span>15 ноября</span><i>✦</i><span>Tanya’s Birthday</span><i>✦</i><span>23</span><i>♠</i><span>главная роль</span><i>✦</i><span>casual chic</span><i>♡</i><span>15 ноября</span><i>✦</i><span>Tanya’s Birthday</span><i>✦</i><span>23</span><i>♠</i><span>главная роль</span><i>✦</i><span>casual chic</span><i>♡</i></div></div>
+
+<section id="invitation" class="scene invitation" aria-labelledby="invite-title">
+<h2 id="invite-title" class="sr-only">Твоё персональное приглашение</h2>
+<div class="stage machine"><div class="stage-inner"><div class="stage-layer">
 <img class="art" src="assets/invite.webp" width="1920" height="1080" alt="Игровой автомат в сияющей рамке среди игральных карт и шахматных фигур." loading="lazy">
+<div class="fx" aria-hidden="true">
+<span class="rays"></span>
+<div class="bulbs"></div>
+<span class="star-glow" style="--x:44.1%;--y:18.4%;--s:4.2%"></span>
+<span class="star-glow" style="--x:49.1%;--y:16.6%;--s:5.6%;--d:-.5s"></span>
+<span class="star-glow" style="--x:55.7%;--y:18.4%;--s:4.2%;--d:-1s"></span>
+<span class="sheen"></span>
+</div>
 <div class="machine-screen">
-<div class="slot-stage"><p class="slot-caption">Твой счастливый билет</p><div class="reels" aria-hidden="true"><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div></div></div>
+<div class="slot-stage"><p class="slot-caption">Твой счастливый билет</p><div class="reels" aria-hidden="true"><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div></div><p class="slot-hint">Дёрни ручку справа →</p></div>
 <div class="invitation-result" hidden><p class="jackpot-label">✦ JACKPOT · 777 ✦</p><h3 class="personal-greeting"></h3><p>Приглашаю тебя отпраздновать вместе со мной<br>мой 23-й день рождения! 🥂</p><p>Тебя ждёт вечер, наполненный весельем,<br>смехом и яркими моментами в отличной компании!</p><p class="result-note">С тебя — хорошее настроение, а с меня — незабываемый праздник!</p><span class="mobile-result-hint">Твоё приглашение ниже ↓</span></div>
-</div><button class="machine-lever" type="button" aria-label="Крутить автомат" title="Крутить автомат"><span></span></button><div class="win-sparks" aria-hidden="true"></div>
-</div><p class="sr-only" id="slot-status" role="status" aria-live="polite"></p>
+</div>
+<span class="jackpot-flash" aria-hidden="true"></span>
+<button class="machine-lever" type="button" aria-label="Крутить автомат" title="Крутить автомат"><span></span></button>
+<span class="lever-hint" aria-hidden="true">Дёрни!</span>
+</div></div>
+<div class="sparkles" data-symbols="♠ ♣ ♦ ♥ ✦" aria-hidden="true"></div>
+</div>
+<p class="sr-only" id="slot-status" role="status" aria-live="polite"></p>
 <div class="mobile-copy mobile-invitation" hidden><p class="eyebrow">Ты в списке гостей · 777</p><h2 class="personal-greeting"></h2><p>Приглашаю тебя отпраздновать вместе со мной мой 23-й день рождения! 🥂</p><p>Тебя ждёт вечер, наполненный весельем, смехом и яркими моментами в отличной компании!</p><p class="note">С тебя — хорошее настроение, а с меня — незабываемый праздник!</p></div>
-<a class="section-link invitation-next" href="#date" hidden>Сохрани дату <span>↘</span></a>
+<a class="section-link invitation-next" href="#date" hidden>Сохрани дату <span aria-hidden="true">↘</span></a>
 </section>
-<section id="date" class="scene date" aria-labelledby="date-title"><div class="ambient ambient-date" aria-hidden="true"><span class="ambient-item" style="--left:19%;--top:16%;--delay:-0.0s;--duration:5s">✧</span><span class="ambient-item" style="--left:79%;--top:74%;--delay:-1.7s;--duration:6s">♠</span><span class="ambient-item" style="--left:86%;--top:24%;--delay:-3.4s;--duration:7s">✦</span><span class="ambient-item" style="--left:25%;--top:81%;--delay:-5.1s;--duration:8s">♦</span><span class="light-wash wash-one"></span><span class="light-wash wash-two"></span><span class="light-streak"></span><span class="ambient-item particle" style="--left:5%;--top:15%;--delay:-0.0s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:28%;--top:32%;--delay:-0.8s;--duration:7s">·</span><span class="ambient-item particle" style="--left:51%;--top:49%;--delay:-1.6s;--duration:8s">·</span><span class="ambient-item particle" style="--left:74%;--top:66%;--delay:-2.4000000000000004s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:6%;--top:83%;--delay:-3.2s;--duration:10s">·</span><span class="ambient-item particle" style="--left:29%;--top:22%;--delay:-4.0s;--duration:11s">·</span><span class="ambient-item particle" style="--left:52%;--top:39%;--delay:-4.800000000000001s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:75%;--top:56%;--delay:-5.6000000000000005s;--duration:7s">·</span><span class="ambient-item particle" style="--left:7%;--top:73%;--delay:-6.4s;--duration:8s">·</span><span class="ambient-item particle" style="--left:30%;--top:90%;--delay:-7.2s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:53%;--top:29%;--delay:-8.0s;--duration:10s">·</span><span class="ambient-item particle" style="--left:76%;--top:46%;--delay:-8.8s;--duration:11s">·</span><span class="art-detail chip-one" style="background-image:url(assets/date.webp);clip-path:ellipse(5.3% 9% at 30.9% 24.5%)"></span><span class="art-detail chip-two" style="background-image:url(assets/date.webp);clip-path:ellipse(5.5% 9.5% at 66.5% 69.5%)"></span></div><h2 id="date-title" class="sr-only">Save the date — 15 ноября</h2><img class="art" src="assets/date.webp" width="1920" height="1080" alt="15/11. Save the date. Розовая карточка между руками, фишками и игральными кубиками." loading="lazy"><div class="date-details"><div><p class="eyebrow">Save the date</p><p class="date-number">15 <em>ноября</em></p></div><dl><div><dt>Место</dt><dd>Скоро здесь</dd></div><div><dt>Время</dt><dd>Скоро здесь</dd></div></dl><p class="date-note">Детали вечера добавим чуть позже.<br>А пока — сохрани эту дату ♡</p></div></section>
-<section id="dress-code" class="scene dress" aria-labelledby="dress-title"><div class="ambient ambient-dress-code" aria-hidden="true"><span class="ambient-item" style="--left:8%;--top:68%;--delay:-0.0s;--duration:5s">✦</span><span class="ambient-item" style="--left:78%;--top:33%;--delay:-1.7s;--duration:6s">✧</span><span class="ambient-item" style="--left:91%;--top:76%;--delay:-3.4s;--duration:7s">✦</span><span class="ambient-item" style="--left:58%;--top:88%;--delay:-5.1s;--duration:8s">·</span><span class="light-wash wash-one"></span><span class="light-wash wash-two"></span><span class="light-streak"></span><span class="ambient-item particle" style="--left:5%;--top:15%;--delay:-0.0s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:28%;--top:32%;--delay:-0.8s;--duration:7s">·</span><span class="ambient-item particle" style="--left:51%;--top:49%;--delay:-1.6s;--duration:8s">·</span><span class="ambient-item particle" style="--left:74%;--top:66%;--delay:-2.4000000000000004s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:6%;--top:83%;--delay:-3.2s;--duration:10s">·</span><span class="ambient-item particle" style="--left:29%;--top:22%;--delay:-4.0s;--duration:11s">·</span><span class="ambient-item particle" style="--left:52%;--top:39%;--delay:-4.800000000000001s;--duration:6s">✦</span><span class="ambient-item particle" style="--left:75%;--top:56%;--delay:-5.6000000000000005s;--duration:7s">·</span><span class="ambient-item particle" style="--left:7%;--top:73%;--delay:-6.4s;--duration:8s">·</span><span class="ambient-item particle" style="--left:30%;--top:90%;--delay:-7.2s;--duration:9s">✦</span><span class="ambient-item particle" style="--left:53%;--top:29%;--delay:-8.0s;--duration:10s">·</span><span class="ambient-item particle" style="--left:76%;--top:46%;--delay:-8.8s;--duration:11s">·</span><span class="art-detail glass-shimmer" style="background-image:url(assets/dress.webp);clip-path:polygon(74% 5%,100% 5%,100% 32%,74% 32%)"></span></div><h2 id="dress-title" class="sr-only">Dress Code — casual chic</h2><img class="art" src="assets/dress.webp" width="1920" height="1080" alt="Dress Code. Жёстких рамок нет! Выбирай образ, в котором вам будет удобно играть, веселиться и танцевать. Ориентируйтесь на casual chic. Коллаж с примерами женских и мужских образов и коктейлями." loading="lazy"><div class="mobile-copy"><p class="eyebrow">Твой образ на вечер</p><h2><em>Dress Code</em></h2><p>Жёстких рамок нет! Выбирай образ, в котором будет удобно играть, веселиться и танцевать.</p><p>Ориентируйся на <strong>casual chic</strong>.</p></div><a class="section-link" href="#wishlist">К вишлисту <span>↘</span></a></section>
-<section id="wishlist" class="scene wishlist" aria-labelledby="wish-title"><div class="ambient ambient-wishlist" aria-hidden="true"><span class="ambient-item" style="--left:13%;--top:64%;--delay:-0.0s;--duration:5s">♡</span><span class="ambient-item" style="--left:39%;--top:86%;--delay:-1.7s;--duration:6s">♡</span><span class="ambient-item" style="--left:83%;--top:83%;--delay:-3.4s;--duration:7s">✧</span><span class="ambient-item" style="--left:89%;--top:18%;--delay:-5.1s;--duration:8s">♡</span><span class="light-wash wash-one"></span><span class="light-wash wash-two"></span><span class="light-streak"></span><span class="ambient-item particle" style="--left:5%;--top:15%;--delay:-0.0s;--duration:6s">♡</span><span class="ambient-item particle" style="--left:28%;--top:32%;--delay:-0.8s;--duration:7s">✧</span><span class="ambient-item particle" style="--left:51%;--top:49%;--delay:-1.6s;--duration:8s">✧</span><span class="ambient-item particle" style="--left:74%;--top:66%;--delay:-2.4000000000000004s;--duration:9s">♡</span><span class="ambient-item particle" style="--left:6%;--top:83%;--delay:-3.2s;--duration:10s">✧</span><span class="ambient-item particle" style="--left:29%;--top:22%;--delay:-4.0s;--duration:11s">✧</span><span class="ambient-item particle" style="--left:52%;--top:39%;--delay:-4.800000000000001s;--duration:6s">♡</span><span class="ambient-item particle" style="--left:75%;--top:56%;--delay:-5.6000000000000005s;--duration:7s">✧</span><span class="ambient-item particle" style="--left:7%;--top:73%;--delay:-6.4s;--duration:8s">✧</span><span class="ambient-item particle" style="--left:30%;--top:90%;--delay:-7.2s;--duration:9s">♡</span><span class="ambient-item particle" style="--left:53%;--top:29%;--delay:-8.0s;--duration:10s">✧</span><span class="ambient-item particle" style="--left:76%;--top:46%;--delay:-8.8s;--duration:11s">✧</span><span class="art-detail claw-sway" style="background-image:url(assets/wishlist.webp);clip-path:polygon(17% 0,47% 0,47% 43%,17% 43%)"></span></div><h2 id="wish-title" class="sr-only">Вишлист</h2><img class="art" src="assets/wishlist.webp" width="1920" height="1080" alt="Вишлист. Ваше присутствие на празднике — главный подарок. Розовый автомат с сердечками и красной сумкой." loading="lazy"><div class="mobile-copy"><p class="eyebrow">С любовью, Таня</p><h2><em>Вишлист</em></h2><p>Ваше присутствие на празднике — главный подарок. И не нужно мучить себя и теряться в догадках.</p><p>Если вам хочется сделать материальный подарок, я составила список со своими пожеланиями.</p><p class="note">Поздравления также принимаются наличным и безналичным расчётом.</p></div><div class="wishlist-empty"><span class="heart" aria-hidden="true">♡</span><div><h3>Мои желания скоро появятся здесь</h3><p>Добавлю подарки и ссылки чуть позже.</p></div></div></section>
+
+<section id="date" class="scene date" aria-labelledby="date-title">
+<h2 id="date-title" class="sr-only">Save the date — 15 ноября</h2>
+<div class="stage"><div class="stage-inner"><div class="stage-layer">
+<img class="art" src="assets/date.webp" width="1920" height="1080" alt="15/11. Save the date. Розовая карточка между руками, фишками и игральными кубиками." loading="lazy">
+<div class="fx" aria-hidden="true">
+<span class="art-detail chip chip-one" style="background-image:url(assets/date.webp);clip-path:ellipse(5.3% 9% at 30.9% 24.5%);transform-origin:30.9% 24.5%"></span>
+<span class="art-detail chip chip-two" style="background-image:url(assets/date.webp);clip-path:ellipse(5.5% 9.5% at 66.5% 69.5%);transform-origin:66.5% 69.5%"></span>
+<span class="card-glow"></span>
+<span class="sheen sheen-card"></span>
+</div>
+</div></div>
+<div class="sparkles" data-symbols="♦ ♠ ✦ ✧" aria-hidden="true"></div>
+</div>
+<div class="date-details">
+<div class="date-head reveal-up"><p class="eyebrow">Save the date</p><p class="date-number">15 <em>ноября</em></p></div>
+<div class="countdown reveal-up" role="timer" aria-label="Сколько осталось до праздника">
+<p class="countdown-title">До праздника</p>
+<div class="countdown-grid">
+<div class="cd-unit"><span class="cd-num" data-unit="days">00</span><span class="cd-label">дней</span></div>
+<div class="cd-unit"><span class="cd-num" data-unit="hours">00</span><span class="cd-label">часов</span></div>
+<div class="cd-unit"><span class="cd-num" data-unit="minutes">00</span><span class="cd-label">минут</span></div>
+<div class="cd-unit"><span class="cd-num" data-unit="seconds">00</span><span class="cd-label">секунд</span></div>
+</div>
+</div>
+<dl class="reveal-up"><div><dt>Место</dt><dd>Скоро здесь</dd></div><div><dt>Время</dt><dd>Скоро здесь</dd></div></dl>
+<p class="date-note reveal-up">Детали вечера добавим чуть позже.<br>А пока — сохрани эту дату ♡</p>
+</div>
+</section>
+
+<section id="dress-code" class="scene dress" aria-labelledby="dress-title">
+<h2 id="dress-title" class="sr-only">Dress Code — casual chic</h2>
+<div class="stage"><div class="stage-inner"><div class="stage-layer">
+<img class="art" src="assets/dress.webp" width="1920" height="1080" alt="Dress Code. Жёстких рамок нет! Выбирай образ, в котором вам будет удобно играть, веселиться и танцевать. Ориентируйтесь на casual chic. Коллаж с примерами женских и мужских образов и коктейлями." loading="lazy">
+<div class="fx" aria-hidden="true">
+<span class="art-detail neon" style="background-image:url(assets/dress.webp);clip-path:inset(3% 40% 72% 2%)"></span>
+<span class="art-detail glass-shimmer" style="background-image:url(assets/dress.webp);clip-path:inset(1% 0 4% 72%)"></span>
+<div class="flashes"></div>
+<span class="sheen"></span>
+</div>
+</div></div>
+<div class="sparkles" data-symbols="✦ ✧ · ✦" aria-hidden="true"></div>
+</div>
+<div class="mobile-copy"><p class="eyebrow">Твой образ на вечер</p><h2><em>Dress Code</em></h2><p>Жёстких рамок нет! Выбирай образ, в котором будет удобно играть, веселиться и танцевать.</p><p>Ориентируйся на <strong>casual chic</strong>.</p></div>
+<a class="section-link" href="#wishlist">К вишлисту <span aria-hidden="true">↘</span></a>
+</section>
+
+<div class="ticker ticker-pink" aria-hidden="true"><div class="ticker-track"><span>с меня — незабываемый праздник</span><i>♡</i><span>с тебя — хорошее настроение</span><i>✦</i><span>с меня — незабываемый праздник</span><i>♡</i><span>с тебя — хорошее настроение</span><i>✦</i></div></div>
+
+<section id="wishlist" class="scene wishlist" aria-labelledby="wish-title">
+<h2 id="wish-title" class="sr-only">Вишлист</h2>
+<div class="stage"><div class="stage-inner"><div class="stage-layer">
+<img class="art" src="assets/wishlist.webp" width="1920" height="1080" alt="Вишлист. Ваше присутствие на празднике — главный подарок. Розовый автомат с сердечками и красной сумкой." loading="lazy">
+<div class="fx" aria-hidden="true">
+<div class="glints"></div>
+<div class="rising"></div>
+<span class="sheen"></span>
+</div>
+</div></div>
+<div class="sparkles" data-symbols="♡ ✧ ♡ ✦" aria-hidden="true"></div>
+</div>
+<div class="mobile-copy"><p class="eyebrow">С любовью, Таня</p><h2><em>Вишлист</em></h2><p>Ваше присутствие на празднике — главный подарок. И не нужно мучить себя и теряться в догадках.</p><p>Если вам хочется сделать материальный подарок, я составила список со своими пожеланиями.</p><p class="note">Поздравления также принимаются наличным и безналичным расчётом.</p></div>
+<div class="wishlist-empty reveal-up"><span class="heart" aria-hidden="true">♡</span><div><h3>Мои желания скоро появятся здесь</h3><p>Добавлю подарки и ссылки чуть позже.</p></div></div>
+</section>
 </main>
-<footer><a class="brand" href="#home">Tanya’s <span>Birthday</span><i>✦</i></a><p>15 ноября · С тебя — хорошее настроение ♡</p><button class="change-name" type="button">Изменить имя</button><a href="#home" class="back-top">Наверх ↑</a></footer>
-<script src="app.js?v=4"></script>
+
+<footer><a class="brand" href="#home">Tanya’s <span>Birthday</span><i aria-hidden="true">✦</i></a><p>15 ноября · С тебя — хорошее настроение ♡</p><button class="change-name" type="button">Изменить имя</button><a href="#home" class="back-top">Наверх ↑</a></footer>
+<script src="app.js?v=5"></script>
 </body></html>
