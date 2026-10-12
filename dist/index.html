@@ -63,7 +63,7 @@
 <section id="invitation" class="scene invitation" aria-labelledby="invite-title">
 <h2 id="invite-title" class="sr-only">Твоё персональное приглашение</h2>
 <div class="stage machine"><div class="stage-inner"><div class="stage-layer">
-<img class="art" src="assets/invite.webp" width="1920" height="1080" alt="Игровой автомат в сияющей рамке среди игральных карт и шахматных фигур." loading="lazy">
+<img class="art" src="assets/invite-v2.webp" width="1920" height="1080" alt="Игровой автомат в сияющей рамке среди игральных карт и шахматных фигур." loading="lazy">
 <div class="fx" aria-hidden="true">
 <span class="rays"></span>
 <div class="bulbs"></div>
@@ -73,12 +73,21 @@
 <span class="sheen"></span>
 </div>
 <div class="machine-screen">
-<div class="slot-stage"><p class="slot-caption">Твой счастливый билет</p><div class="reels" aria-hidden="true"><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div></div><p class="slot-hint">Дёрни ручку справа →</p></div>
+<div class="slot-stage"><p class="slot-caption">Твой счастливый билет</p><div class="reels" aria-hidden="true"><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div><div class="reel"><div class="reel-track"></div></div></div><p class="slot-hint">Потяни ручку справа вниз ↓</p></div>
 <div class="invitation-result" hidden><p class="jackpot-label">✦ JACKPOT · 777 ✦</p><h3 class="personal-greeting"></h3><p>Приглашаю тебя отпраздновать вместе со мной<br>мой 23-й день рождения! 🥂</p><p>Тебя ждёт вечер, наполненный весельем,<br>смехом и яркими моментами в отличной компании!</p><p class="result-note">С тебя — хорошее настроение, а с меня — незабываемый праздник!</p><span class="mobile-result-hint">Твоё приглашение ниже ↓</span></div>
 </div>
 <span class="jackpot-flash" aria-hidden="true"></span>
-<button class="machine-lever" type="button" aria-label="Крутить автомат" title="Крутить автомат"><span></span></button>
-<span class="lever-hint" aria-hidden="true">Дёрни!</span>
+<svg class="lever-svg" viewBox="0 0 160 90" preserveAspectRatio="none" aria-hidden="true">
+<defs>
+<linearGradient id="lever-arm-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b2f63"/><stop offset=".3" stop-color="#f6eaff"/><stop offset=".55" stop-color="#c3a9e0"/><stop offset="1" stop-color="#2f2552"/></linearGradient>
+<radialGradient id="lever-knob-fill" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#fff"/><stop offset=".14" stop-color="#ffe3f2"/><stop offset=".45" stop-color="#c79acb"/><stop offset=".8" stop-color="#4a3f78"/><stop offset="1" stop-color="#2b2550"/></radialGradient>
+</defs>
+<rect class="lever-arm" fill="url(#lever-arm-fill)" rx=".7"/>
+<circle class="lever-knob" fill="url(#lever-knob-fill)"/>
+</svg>
+<span class="lever-guide" aria-hidden="true"></span>
+<button class="machine-lever" type="button" aria-label="Потянуть ручку автомата вниз" title="Потяни ручку вниз"></button>
+<span class="lever-hint" aria-hidden="true">Тяни вниз</span>
 </div></div>
 <div class="sparkles" data-symbols="♠ ♣ ♦ ♥ ✦" aria-hidden="true"></div>
 </div>

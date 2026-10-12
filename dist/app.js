@@ -277,5 +277,106 @@ nameForm.addEventListener('submit', event => {
 nameInput.addEventListener('input', () => nameInput.setCustomValidity(''));
 welcome.addEventListener('cancel', event => { if(!accepted) event.preventDefault(); });
 document.querySelector('.change-name').addEventListener('click', () => welcome.showModal());
-lever.addEventListener('click', spin);
+
+// ---------- The lever: drag the knob down like a real one-armed bandit ----------
+const leverArm = document.querySelector('.lever-arm');
+const leverKnob = document.querySelector('.lever-knob');
+// Geometry in the SVG's 160×90 units (1 unit = 1/1.6 % of width, 1/0.9 % of height).
+const ROOT = {x:84.4 * 1.6, y:48.6 * .9};
+const REST = {x:85.1 * 1.6, y:30.2 * .9};
+const ARM = Math.hypot(REST.x - ROOT.x, REST.y - ROOT.y);
+const LEAN = Math.asin((REST.x - ROOT.x) / ARM);
+const MAX_ANGLE = 150 * Math.PI / 180;
+let leverPos = 0, leverVel = 0, leverAnim = 0, drag = null;
+function renderLever(p){
+  const theta = p * MAX_ANGLE;
+  const near = Math.max(0, Math.sin(theta));
+  const knob = {x:ROOT.x + Math.sin(LEAN) * ARM * (1 - p * .5), y:ROOT.y - Math.cos(theta) * ARM};
+  const radius = 3.52 * (1 + .32 * near);
+  const width = 1.5 * (1 + .25 * near);
+  const dx = knob.x - ROOT.x, dy = knob.y - ROOT.y;
+  leverArm.setAttribute('x', 0); leverArm.setAttribute('y', -width / 2);
+  leverArm.setAttribute('width', Math.max(.01, Math.hypot(dx, dy))); leverArm.setAttribute('height', width);
+  leverArm.setAttribute('transform', `translate(${ROOT.x} ${ROOT.y}) rotate(${Math.atan2(dy, dx) * 180 / Math.PI})`);
+  leverKnob.setAttribute('cx', knob.x); leverKnob.setAttribute('cy', knob.y); leverKnob.setAttribute('r', radius);
+  lever.style.left = (knob.x / 1.6) + '%'; lever.style.top = (knob.y / .9) + '%';
+  lever.style.width = (radius * 2 / 1.6) + '%';
+}
+function stopLeverAnim(){ cancelAnimationFrame(leverAnim); leverAnim = 0; }
+function setLever(p){ leverPos = p; renderLever(p); }
+function tweenLever(to, duration){
+  stopLeverAnim();
+  return new Promise(resolve => {
+    const from = leverPos, start = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - start) / duration);
+      setLever(from + (to - from) * (1 - Math.pow(1 - t, 3)));
+      if(t < 1) leverAnim = requestAnimationFrame(step); else { leverAnim = 0; resolve(); }
+    };
+    leverAnim = requestAnimationFrame(step);
+  });
+}
+// A damped spring back to rest, overshooting slightly like a real lever.
+function springBack(){
+  stopLeverAnim();
+  if(reducedMotion.matches){ setLever(0); return; }
+  leverVel = 0;
+  const step = () => {
+    leverVel = (leverVel + (0 - leverPos) * .14) * .8;
+    setLever(Math.max(-.08, leverPos + leverVel));
+    if(Math.abs(leverPos) > .002 || Math.abs(leverVel) > .002) leverAnim = requestAnimationFrame(step);
+    else { setLever(0); leverAnim = 0; }
+  };
+  leverAnim = requestAnimationFrame(step);
+}
+function buzz(ms){ try { navigator.vibrate && navigator.vibrate(ms); } catch {} }
+async function pullThrough(){
+  machine.classList.add('is-pulling');
+  await tweenLever(1, reducedMotion.matches ? 0 : 110);
+  buzz(40); spin();
+  machine.classList.remove('is-pulling');
+  setTimeout(springBack, 120);
+}
+lever.addEventListener('pointerdown', event => {
+  if(!accepted || spinning) return;
+  event.preventDefault();
+  lever.setPointerCapture(event.pointerId);
+  stopLeverAnim();
+  const travel = machine.getBoundingClientRect().height * .36;
+  drag = {id:event.pointerId, y:event.clientY, from:leverPos, travel, moved:0, notch:0};
+  machine.classList.add('is-pulling');
+});
+lever.addEventListener('pointermove', event => {
+  if(!drag || event.pointerId !== drag.id) return;
+  const dy = event.clientY - drag.y;
+  drag.moved = Math.max(drag.moved, Math.abs(dy));
+  setLever(Math.max(0, Math.min(1, drag.from + dy / drag.travel)));
+  const notch = Math.floor(leverPos * 4);
+  if(notch > drag.notch) buzz(6);
+  drag.notch = notch;
+});
+function releaseLever(event){
+  if(!drag || event.pointerId !== drag.id) return;
+  const moved = drag.moved; drag = null;
+  machine.classList.remove('is-pulling');
+  if(leverPos >= .78){ pullThrough(); return; }
+  if(moved < 4){ hintPull(); return; }
+  springBack();
+}
+lever.addEventListener('pointerup', releaseLever);
+lever.addEventListener('pointercancel', releaseLever);
+// A plain click only teases the lever; keyboard users get the full pull.
+lever.addEventListener('click', event => { if(event.detail === 0 && accepted && !spinning) pullThrough(); });
+const leverHint = document.querySelector('.lever-hint');
+async function hintPull(){
+  machine.classList.remove('has-spun');
+  leverHint.textContent = 'Тяни вниз ↓';
+  await tweenLever(.22, 180); springBack();
+}
+// While nobody has pulled it yet, the lever twitches now and then to invite a pull.
+setInterval(() => {
+  if(reducedMotion.matches || drag || spinning || leverAnim || machine.classList.contains('has-spun') || !machine.closest('.scene').classList.contains('in-view')) return;
+  tweenLever(.14, 260).then(springBack);
+}, 3200);
+renderLever(0);
 populateReels(); welcome.showModal();
