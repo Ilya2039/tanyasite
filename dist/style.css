@@ -72,9 +72,9 @@ nav span{font-size:16px;padding-left:5px}
 .welcome input::placeholder{color:#b1a1bd}
 .welcome fieldset{border:0;padding:0;margin:0 0 24px;display:flex;gap:20px;flex-wrap:wrap}
 .welcome legend{margin-bottom:12px;color:#b1a1bd}
-.welcome fieldset label{display:flex;gap:7px;align-items:center;cursor:pointer}
+.welcome fieldset label{display:flex;gap:7px;align-items:center}
 .welcome input[type=radio]{accent-color:#ff8dbc}
-.pink-button{position:relative;overflow:hidden;background:linear-gradient(120deg,#ff7fb5,#ffb3d1 50%,#ff8dbc);color:#30102c;border:0;border-radius:14px;width:100%;padding:17px;font:600 14px var(--sans);letter-spacing:.03em;cursor:pointer;box-shadow:0 10px 30px #ff5fa240;transition:transform .25s,box-shadow .25s}
+.pink-button{position:relative;overflow:hidden;background:linear-gradient(120deg,#ff7fb5,#ffb3d1 50%,#ff8dbc);color:#30102c;border:0;border-radius:14px;width:100%;padding:17px;font:600 14px var(--sans);letter-spacing:.03em;box-shadow:0 10px 30px #ff5fa240;transition:transform .25s,box-shadow .25s}
 .pink-button:before{content:'';position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,#ffffffb0,transparent);transform:skewX(-20deg);animation:button-shine 3.2s ease-in-out infinite}
 .pink-button:hover{transform:translateY(-2px);box-shadow:0 16px 40px #ff5fa266}
 .pink-button span{margin-left:22px;display:inline-block;transition:transform .3s}
@@ -160,11 +160,11 @@ nav span{font-size:16px;padding-left:5px}
 .machine.is-winner .reel{animation:reel-win .5s ease-in-out 3}
 .lever-svg{position:absolute;inset:0;width:100%;height:100%;z-index:2;overflow:visible;pointer-events:none;filter:drop-shadow(0 0 .6vw #f9c1e570) drop-shadow(0 .4vw .5vw #0007)}
 .machine.is-pulling .lever-svg,.machine.is-spinning .lever-svg{filter:drop-shadow(0 0 1vw #ffc4ec) drop-shadow(0 .4vw .5vw #0007)}
-.machine-lever{position:absolute;z-index:4;left:85.1%;top:30.2%;width:4.4%;aspect-ratio:1;translate:-50% -50%;padding:0;border:0;border-radius:50%;background:transparent;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+.machine-lever{position:absolute;z-index:4;left:85.1%;top:30.2%;width:4.4%;aspect-ratio:1;translate:-50% -50%;padding:0;border:0;border-radius:50%;background:transparent;touch-action:none;-webkit-tap-highlight-color:transparent}
 .machine-lever:after{content:'';position:absolute;inset:-70%;border-radius:50%}
 .machine-lever:before{content:'';position:absolute;inset:-30%;border-radius:50%;border:2px solid #ffc6e4;opacity:0;animation:lever-ring 1.8s ease-out infinite;pointer-events:none}
 .machine.has-spun .machine-lever:before{display:none}
-.machine.is-pulling .machine-lever{cursor:grabbing}
+
 .machine-lever:disabled{cursor:wait}
 .machine-lever:focus-visible{outline:2px solid var(--pink);outline-offset:4px}
 .lever-hint{position:absolute;z-index:3;left:88.6%;top:30.2%;translate:0 -50%;padding:.5em .9em;border-radius:30px;background:#ff8dbc;color:#3a0b24;font:700 clamp(8px,.95vw,16px) var(--sans);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;box-shadow:0 6px 20px #ff5fa280;animation:hint-nudge 1.4s ease-in-out infinite;pointer-events:none}
@@ -280,6 +280,11 @@ footer p{font-size:15px;font-style:italic;color:#a69aa9}
 @keyframes bg-pan{0%,100%{background-position:0 0}50%{background-position:100% 0}}
 
 /* ---------- Responsive ---------- */
+/* Magic-wand cursor; the hotspot is the star at the tip */
+html,body{cursor:url("data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cdefs%3E%3ClinearGradient id="s" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#fff"/%3E%3Cstop offset=".5" stop-color="#e9d2ff"/%3E%3Cstop offset="1" stop-color="#3a2a66"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d="M10 10 L29 29" stroke="#1a1030" stroke-width="4.6" stroke-linecap="round"/%3E%3Cpath d="M10 10 L29 29" stroke="url%28#s%29" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M24.5 24.5 L29 29" stroke="#ff8dbc" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M6 0.8 L7.5 4.5 L11.4 4.6 L8.4 7 L9.5 10.8 L6 8.6 L2.5 10.8 L3.6 7 L0.6 4.6 L4.5 4.5 Z" fill="#ffd59a" stroke="#1a1030" stroke-width=".9" stroke-linejoin="round"/%3E%3Ccircle cx="14" cy="3" r="1" fill="#fff"/%3E%3Ccircle cx="3" cy="14" r=".8" fill="#ffd6ea"/%3E%3C/svg%3E") 6 6,auto}
+a,button,label,summary,[role=button],.machine-lever,.welcome fieldset label{cursor:url("data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cdefs%3E%3ClinearGradient id="s" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#fff"/%3E%3Cstop offset=".5" stop-color="#e9d2ff"/%3E%3Cstop offset="1" stop-color="#3a2a66"/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx="6" cy="6" r="6" fill="#ff8dbc" opacity=".45"/%3E%3Cpath d="M10 10 L29 29" stroke="#1a1030" stroke-width="4.6" stroke-linecap="round"/%3E%3Cpath d="M10 10 L29 29" stroke="url%28#s%29" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M24.5 24.5 L29 29" stroke="#ff8dbc" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M6 0.8 L7.5 4.5 L11.4 4.6 L8.4 7 L9.5 10.8 L6 8.6 L2.5 10.8 L3.6 7 L0.6 4.6 L4.5 4.5 Z" fill="#fff3c4" stroke="#1a1030" stroke-width=".9" stroke-linejoin="round"/%3E%3Ccircle cx="14" cy="3" r="1" fill="#fff"/%3E%3Ccircle cx="3" cy="14" r=".8" fill="#ffd6ea"/%3E%3C/svg%3E") 6 6,pointer}
+.machine.is-pulling .machine-lever{cursor:url("data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cdefs%3E%3ClinearGradient id="s" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#fff"/%3E%3Cstop offset=".5" stop-color="#e9d2ff"/%3E%3Cstop offset="1" stop-color="#3a2a66"/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx="6" cy="6" r="6" fill="#ff8dbc" opacity=".45"/%3E%3Cpath d="M10 10 L29 29" stroke="#1a1030" stroke-width="4.6" stroke-linecap="round"/%3E%3Cpath d="M10 10 L29 29" stroke="url%28#s%29" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M24.5 24.5 L29 29" stroke="#ff8dbc" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M6 0.8 L7.5 4.5 L11.4 4.6 L8.4 7 L9.5 10.8 L6 8.6 L2.5 10.8 L3.6 7 L0.6 4.6 L4.5 4.5 Z" fill="#fff3c4" stroke="#1a1030" stroke-width=".9" stroke-linejoin="round"/%3E%3Ccircle cx="14" cy="3" r="1" fill="#fff"/%3E%3Ccircle cx="3" cy="14" r=".8" fill="#ffd6ea"/%3E%3C/svg%3E") 6 6,grabbing}
+input[type=text],input:not([type]),textarea{cursor:text}
 @media(max-width:1100px){.date-details{grid-template-columns:1fr 1fr}.date-details dl{grid-column:1/-1}}
 @media(max-width:900px){nav{gap:18px}footer p{max-width:160px;text-align:center;line-height:1.5}}
 @media(max-width:600px){
