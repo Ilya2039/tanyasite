@@ -276,7 +276,6 @@ nameForm.addEventListener('submit', event => {
 });
 nameInput.addEventListener('input', () => nameInput.setCustomValidity(''));
 welcome.addEventListener('cancel', event => { if(!accepted) event.preventDefault(); });
-document.querySelector('.change-name').addEventListener('click', () => welcome.showModal());
 
 // ---------- The lever: drag the knob down like a real one-armed bandit ----------
 const leverArm = document.querySelector('.lever-arm');
@@ -285,19 +284,16 @@ const leverKnob = document.querySelector('.lever-knob');
 const ROOT = {x:84.4 * 1.6, y:48.6 * .9};
 const REST = {x:85.1 * 1.6, y:30.2 * .9};
 const ARM = Math.hypot(REST.x - ROOT.x, REST.y - ROOT.y);
-const LEAN = Math.asin((REST.x - ROOT.x) / ARM);
 const MAX_ANGLE = 150 * Math.PI / 180;
 let leverPos = 0, leverVel = 0, leverAnim = 0, drag = null;
+// The knob travels straight down (the arm tips toward the viewer), then springs back up.
 function renderLever(p){
   const theta = p * MAX_ANGLE;
   const near = Math.max(0, Math.sin(theta));
-  const knob = {x:ROOT.x + Math.sin(LEAN) * ARM * (1 - p * .5), y:ROOT.y - Math.cos(theta) * ARM};
+  const knob = {x:ROOT.x + (REST.x - ROOT.x) * Math.cos(theta), y:ROOT.y - Math.cos(theta) * ARM};
   const radius = 3.52 * (1 + .32 * near);
-  const width = 1.5 * (1 + .25 * near);
-  const dx = knob.x - ROOT.x, dy = knob.y - ROOT.y;
-  leverArm.setAttribute('x', 0); leverArm.setAttribute('y', -width / 2);
-  leverArm.setAttribute('width', Math.max(.01, Math.hypot(dx, dy))); leverArm.setAttribute('height', width);
-  leverArm.setAttribute('transform', `translate(${ROOT.x} ${ROOT.y}) rotate(${Math.atan2(dy, dx) * 180 / Math.PI})`);
+  const w = 1.5 * (1 + .25 * near) / 2;
+  leverArm.setAttribute('points', `${ROOT.x - w},${ROOT.y} ${ROOT.x + w},${ROOT.y} ${knob.x + w},${knob.y} ${knob.x - w},${knob.y}`);
   leverKnob.setAttribute('cx', knob.x); leverKnob.setAttribute('cy', knob.y); leverKnob.setAttribute('r', radius);
   lever.style.left = (knob.x / 1.6) + '%'; lever.style.top = (knob.y / .9) + '%';
   lever.style.width = (radius * 2 / 1.6) + '%';

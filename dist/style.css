@@ -235,8 +235,7 @@ nav span{font-size:16px;padding-left:5px}
 
 footer{padding:35px 5%;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #ffffff18}
 footer p{font-size:15px;font-style:italic;color:#a69aa9}
-.back-top,.change-name{font:600 11px var(--sans);letter-spacing:.06em}
-.change-name{color:#d9b7d0;background:transparent;border:0;border-bottom:1px solid #795f78;padding:6px 0;cursor:pointer}
+.back-top{font:600 11px var(--sans);letter-spacing:.06em}
 
 /* ---------- Keyframes ---------- */
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
