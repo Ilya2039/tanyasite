@@ -1,3 +1,4 @@
+@font-face{font-family:Benzin;src:url(assets/fonts/benzin-bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
 :root{
   color-scheme:dark;
   --pink:#ff8dbc;--hot:#ff3d8b;--gold:#ffd59a;--ink:#070613;--white:#fff9fc;
@@ -5,6 +6,7 @@
   --script:'Great Vibes','Snell Roundhand',cursive;
   --sans:Manrope,Arial,sans-serif;
   --header:72px;
+  --benzin:Benzin,Manrope,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:var(--header)}
@@ -83,7 +85,7 @@ nav span{font-size:16px;padding-left:5px}
 
 /* ---------- Scenes ---------- */
 .scene{position:relative;max-width:1920px;margin:0 auto;overflow:hidden}
-.hero{background:#090822}.invitation{background:#131047}.date,.dress{background:#000}.wishlist{background:#eaa0b5}
+.hero{background:#090822}.program{background:#2a3fd0}.invitation{background:#131047}.date,.dress{background:#000}.wishlist{background:#eaa0b5}
 .stage{position:relative;aspect-ratio:16/9;overflow:hidden;isolation:isolate;transition:clip-path 1.4s cubic-bezier(.2,.8,.2,1)}
 .stage-inner{position:absolute;inset:0;scale:1.2;filter:brightness(.25) saturate(.6) blur(6px);transition:scale 1.8s cubic-bezier(.2,.8,.2,1),filter 1.4s ease;will-change:transform}
 .stage-layer{position:absolute;inset:0;animation:breathe 16s ease-in-out infinite}
@@ -215,15 +217,95 @@ nav span{font-size:16px;padding-left:5px}
 
 /* Wishlist */
 .wishlist .sheen{opacity:.35}
-.glints{inset:0}
 .glint{position:absolute;left:var(--x);top:var(--y);width:var(--s);aspect-ratio:1;translate:-50% -50%;mix-blend-mode:screen;animation:glint var(--dur) ease-in-out var(--delay) infinite;opacity:0}
 .glint:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff 50%,transparent) 50%/100% 8% no-repeat,linear-gradient(0deg,transparent,#fff 50%,transparent) 50%/8% 100% no-repeat,radial-gradient(circle,#fff 0,#fff6 15%,transparent 40%)}
 .rising{inset:0}
 .rise{position:absolute;left:var(--x);top:100%;font-size:var(--size);color:var(--c);text-shadow:0 2px 0 #00000014,0 0 14px #ff6f9c88;animation:rise var(--dur) cubic-bezier(.3,.1,.5,1) var(--delay) infinite;opacity:0}
-.wishlist-empty{background:linear-gradient(90deg,#f4b9cd,#ffd3e2,#f4b9cd);background-size:200% 100%;animation:bg-pan 8s ease-in-out infinite;color:#54152d;display:flex;align-items:center;justify-content:center;gap:24px;padding:42px 24px;border-top:1px solid #fff7}
+/* Claw machine: the empty claw dives into the hearts, pulls a prize out, the prize vanishes, repeat */
+.claw-rig{position:absolute;inset:0;pointer-events:none;will-change:translate}
+.claw-cable{position:absolute;left:38.5%;top:-100%;width:.3%;height:105.8%;background:linear-gradient(90deg,#7d6a86,#fff 45%,#b9a7c4 70%,#5e4f6b)}
+.claw{position:absolute;left:27.55%;top:5.09%;width:22.29%;height:36.39%}
+.claw img{position:absolute;inset:0;width:100%;height:100%}
+.claw-arm.left{transform-origin:27.1% 54.7%}
+.claw-arm.right{transform-origin:71.5% 54.7%}
+.claw-prize{position:absolute;left:26.5%;top:35.5%;width:24%;height:36.6%}
+.claw-prize img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 0;transform-origin:50% 0;filter:drop-shadow(0 .6vw .8vw #7a1b3a55)}
+.hearts-front{position:absolute;left:21.875%;top:61.11%;width:34.375%;height:38.89%;pointer-events:none}
+/* Finale: the kittens video melting into the page, and the last words */
+.finale{position:relative;max-width:1920px;margin:0 auto;display:grid;grid-template-columns:1fr auto;align-items:center;gap:5%;padding:40px 8% 40px;overflow:hidden;background:radial-gradient(ellipse 50% 70% at 72% 50%,#7a1b4a66,transparent 70%),radial-gradient(ellipse 40% 50% at 15% 60%,#3a1f7a55,transparent 70%),var(--ink)}
+.finale-video{position:relative;grid-column:2;grid-row:1;height:min(92vh,960px);aspect-ratio:9/16}
+.finale-video video{display:block;width:100%;height:100%;object-fit:cover;border-radius:18px;-webkit-mask:linear-gradient(transparent,#000 5%,#000 90%,transparent),linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);-webkit-mask-composite:source-in;mask:linear-gradient(transparent,#000 5%,#000 90%,transparent),linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-composite:intersect}
+.finale-sound{position:absolute;left:50%;bottom:9%;translate:-50% 0;padding:9px 18px;border:1px solid #ffffff55;border-radius:30px;background:#0007;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font:600 12px var(--sans);letter-spacing:.06em;white-space:nowrap}
+.finale-sound[aria-pressed=true]{background:#ff8dbc;color:#30102c;border-color:#ff8dbc}
+.finale-copy{grid-column:1;grid-row:1;position:relative;z-index:1}
+.finale-copy .eyebrow{font-size:12px;margin-bottom:18px}
+.finale h2{margin:0 0 30px;line-height:.9}
+.finale h2 span{display:block;font:italic 400 clamp(48px,6vw,110px)/1 var(--serif);color:#ffe6f1}
+.finale h2 em{display:block;font:400 clamp(74px,10vw,190px)/1.05 var(--script);font-style:normal;background:linear-gradient(90deg,#ff8dbc,#ffd2e6,#ff5fa2,#ff8dbc);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:text-shine 6s linear infinite;filter:drop-shadow(0 0 24px #ff5fa266);padding:0 .1em 0 0}
+.finale-when{font:600 clamp(16px,1.4vw,24px) var(--sans);letter-spacing:.08em;margin:0 0 8px}
+.finale-where{font:italic clamp(18px,1.5vw,26px) var(--serif);color:#d9c6e2;margin:0 0 26px}
+.finale-sign{font:400 clamp(30px,2.6vw,46px) var(--script);color:#ffacd0;margin:0}
+/* Venue and time written onto the pink save-the-date card (rotated with it) */
+.card-text{position:absolute;width:0;height:0;rotate:-29.7deg;transform-origin:0 0}
+.card-text span{position:absolute;left:0;bottom:-.24em;white-space:nowrap;font:italic 500 calc(min(100vw,1920px) * 27 / 1920) var(--serif);color:#2b0718;letter-spacing:.01em;font-variant-numeric:lining-nums}
+.card-time span{font-size:calc(min(100vw,1920px) * 36 / 1920);font-style:normal}
+.venue-link{border-bottom:1px solid #ffffff40}
+.venue-link:hover{color:var(--pink)}
+.program-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.program-list li{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:baseline;padding:14px 18px;border:1px solid #ffffff55;border-radius:40px}
+.program-list b{font:400 22px var(--serif);white-space:nowrap}
+.program-list span{font-size:18px;line-height:1.35}
+.contacts{font-style:normal;display:grid;gap:6px;font:600 14px var(--sans)}
+.contacts-title{font:600 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#a29aa7}
+.contacts a:hover{color:var(--pink)}
+.contacts small{display:block;font:italic 400 13px var(--serif);color:#a69aa9;margin-top:1px}
+/* Prize card next to the claw, booking dialog, and the guest's own bookings */
+.prize-panel{position:absolute;left:0;right:0;top:0;aspect-ratio:16/9;pointer-events:none;z-index:5}
+.prize-card{position:absolute;left:2.5%;top:28%;width:24%;padding:1.6vw 1.5vw 1.3vw;border-radius:1.4vw;background:#fff4f8cc;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1vw 3vw #b0285a33,inset 0 0 0 1px #fff;color:#54152d;pointer-events:auto;animation:prize-in .6s cubic-bezier(.2,.9,.25,1.2) both}
+.prize-card[hidden]{display:none}
+.prize-title{display:block;font:700 clamp(20px,2.25vw,43px)/1.14 var(--benzin);color:#54152d;text-decoration:none;text-wrap:balance}
+.prize-title:after{content:' ↗';font:600 .55em var(--sans);color:#d6245f;vertical-align:.35em}
+.prize-title:hover{color:#b0174f;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.15em}
+.prize-actions{display:flex;align-items:center;gap:1vw;margin-top:1.2vw}
+.prize-book{width:auto;flex:1;padding:clamp(10px,.9vw,17px) 1vw;font-size:clamp(12px,.95vw,16px)}
+.prize-next{background:none;border:0;padding:6px 0;color:#853650;font:600 clamp(11px,.8vw,14px) var(--sans);letter-spacing:.04em;white-space:nowrap}
+.prize-next:hover{color:#d6245f}
+.prize-split{display:block;margin-top:.8vw;padding:6px 0;background:none;border:0;border-bottom:1px dashed #a3355d;color:#a3355d;font:600 clamp(11px,.85vw,15px) var(--sans);letter-spacing:.03em}
+.prize-split[hidden]{display:none}
+.prize-split:hover{color:#d6245f;border-color:#d6245f}
+.prize-split-count:not(:empty){display:inline-block;margin-left:6px;padding:1px 8px;border-radius:20px;background:#ff8dbc;color:#30102c;font-size:.9em}
+.split-people{margin:0 0 20px;padding:14px 16px;border-radius:14px;background:#ffffff0d;border:1px solid #ffffff22}
+.split-people[hidden]{display:none}
+.split-people-title{margin:0 0 8px;font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#b1a1bd}
+.split-people ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.split-people li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font:15px/1.4 var(--sans)}
+.split-people b{color:#ffd2e6;font-weight:600}
+.split-people a{color:#fff;border-bottom:1px solid #ffffff55}
+.split-people button{background:none;border:0;padding:0;color:#b5a2c1;font:600 12px var(--sans);text-decoration:underline}
+.prize-status{position:absolute;left:2.5%;top:28%;width:24%;margin:0;padding:1.2vw 1.4vw;border-radius:1.4vw;background:#fff4f8cc;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1vw 3vw #b0285a33,inset 0 0 0 1px #fff;font:700 clamp(14px,1.3vw,24px)/1.25 var(--benzin);color:#54152d;animation:prize-in .6s cubic-bezier(.2,.9,.25,1.2) both}
+.prize-status:empty{display:none}
+.prize-card:not([hidden])~.prize-status{top:auto;bottom:22%}
+.book-dialog h2{font:700 30px/1.15 var(--benzin);margin:0 0 16px}
+.book-text{font:16px/1.5 var(--sans);color:#d9c6e2;margin:0 0 22px}
+.book-text b{color:#ffd2e6;font-weight:600}
+.book-error{font:600 14px/1.4 var(--sans);color:#ff9bb8;margin:-8px 0 18px}
+.book-cancel{display:block;width:100%;margin-top:12px;padding:12px;background:none;border:0;color:#b5a2c1;font:600 13px var(--sans);letter-spacing:.04em}
+.book-cancel:hover{color:#fff}
+.my-bookings[hidden]{display:none}
+.my-bookings ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.my-bookings ul{gap:14px}
+.my-bookings li{display:flex;gap:16px;align-items:center}
+.my-bookings img{width:64px;height:64px;object-fit:contain;flex:none;padding:6px;border-radius:14px;background:#fff8;box-shadow:inset 0 0 0 1px #fff}
+.my-bookings li div{display:grid;gap:4px}
+.my-bookings .booked-title{font:700 16px/1.25 var(--benzin)}
+.my-bookings .booked-price{font:600 14px var(--sans);color:#a3355d}
+.my-bookings a{color:#54152d}
+.my-bookings button{justify-self:start;background:none;border:0;padding:0;color:#a3355d;font:600 12px var(--sans);letter-spacing:.04em;text-decoration:underline}
+@keyframes prize-in{from{opacity:0;transform:translateX(-12px) scale(.96)}}
+.my-bookings{background:linear-gradient(90deg,#f4b9cd,#ffd3e2,#f4b9cd);background-size:200% 100%;animation:bg-pan 8s ease-in-out infinite;color:#54152d;display:flex;align-items:center;justify-content:center;gap:24px;padding:42px 24px;border-top:1px solid #fff7}
 .heart{font-size:60px;display:inline-block;animation:heartbeat 1.6s ease-in-out infinite;color:#d6245f}
-.wishlist-empty h3{font:500 26px var(--serif);margin:0 0 6px}
-.wishlist-empty p{font:14px var(--sans);margin:0;opacity:.75}
+.my-bookings h3{font:500 26px var(--serif);margin:0 0 6px}
+.my-bookings p{font:14px var(--sans);margin:0;opacity:.75}
 
 /* Links & copy */
 .mobile-copy{display:none}
@@ -281,9 +363,9 @@ footer p{font-size:15px;font-style:italic;color:#a69aa9}
 
 /* ---------- Responsive ---------- */
 /* Magic-wand cursor; the hotspot is the star at the tip */
-html,body{cursor:url("data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cdefs%3E%3ClinearGradient id="s" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#fff"/%3E%3Cstop offset=".5" stop-color="#e9d2ff"/%3E%3Cstop offset="1" stop-color="#3a2a66"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d="M10 10 L29 29" stroke="#1a1030" stroke-width="4.6" stroke-linecap="round"/%3E%3Cpath d="M10 10 L29 29" stroke="url%28#s%29" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M24.5 24.5 L29 29" stroke="#ff8dbc" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M6 0.8 L7.5 4.5 L11.4 4.6 L8.4 7 L9.5 10.8 L6 8.6 L2.5 10.8 L3.6 7 L0.6 4.6 L4.5 4.5 Z" fill="#ffd59a" stroke="#1a1030" stroke-width=".9" stroke-linejoin="round"/%3E%3Ccircle cx="14" cy="3" r="1" fill="#fff"/%3E%3Ccircle cx="3" cy="14" r=".8" fill="#ffd6ea"/%3E%3C/svg%3E") 6 6,auto}
-a,button,label,summary,[role=button],.machine-lever,.welcome fieldset label{cursor:url("data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cdefs%3E%3ClinearGradient id="s" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#fff"/%3E%3Cstop offset=".5" stop-color="#e9d2ff"/%3E%3Cstop offset="1" stop-color="#3a2a66"/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx="6" cy="6" r="6" fill="#ff8dbc" opacity=".45"/%3E%3Cpath d="M10 10 L29 29" stroke="#1a1030" stroke-width="4.6" stroke-linecap="round"/%3E%3Cpath d="M10 10 L29 29" stroke="url%28#s%29" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M24.5 24.5 L29 29" stroke="#ff8dbc" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M6 0.8 L7.5 4.5 L11.4 4.6 L8.4 7 L9.5 10.8 L6 8.6 L2.5 10.8 L3.6 7 L0.6 4.6 L4.5 4.5 Z" fill="#fff3c4" stroke="#1a1030" stroke-width=".9" stroke-linejoin="round"/%3E%3Ccircle cx="14" cy="3" r="1" fill="#fff"/%3E%3Ccircle cx="3" cy="14" r=".8" fill="#ffd6ea"/%3E%3C/svg%3E") 6 6,pointer}
-.machine.is-pulling .machine-lever{cursor:url("data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cdefs%3E%3ClinearGradient id="s" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop offset="0" stop-color="#fff"/%3E%3Cstop offset=".5" stop-color="#e9d2ff"/%3E%3Cstop offset="1" stop-color="#3a2a66"/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx="6" cy="6" r="6" fill="#ff8dbc" opacity=".45"/%3E%3Cpath d="M10 10 L29 29" stroke="#1a1030" stroke-width="4.6" stroke-linecap="round"/%3E%3Cpath d="M10 10 L29 29" stroke="url%28#s%29" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M24.5 24.5 L29 29" stroke="#ff8dbc" stroke-width="2.6" stroke-linecap="round"/%3E%3Cpath d="M6 0.8 L7.5 4.5 L11.4 4.6 L8.4 7 L9.5 10.8 L6 8.6 L2.5 10.8 L3.6 7 L0.6 4.6 L4.5 4.5 Z" fill="#fff3c4" stroke="#1a1030" stroke-width=".9" stroke-linejoin="round"/%3E%3Ccircle cx="14" cy="3" r="1" fill="#fff"/%3E%3Ccircle cx="3" cy="14" r=".8" fill="#ffd6ea"/%3E%3C/svg%3E") 6 6,grabbing}
+html,body{cursor:url("assets/wand.svg") 6 6,auto}
+a,button,label,summary,[role=button],.machine-lever,.welcome fieldset label{cursor:url("assets/wand-hover.svg") 6 6,pointer}
+.machine.is-pulling .machine-lever{cursor:url("assets/wand-hover.svg") 6 6,grabbing}
 input[type=text],input:not([type]),textarea{cursor:text}
 @media(max-width:1100px){.date-details{grid-template-columns:1fr 1fr}.date-details dl{grid-column:1/-1}}
 @media(max-width:900px){nav{gap:18px}footer p{max-width:160px;text-align:center;line-height:1.5}}
@@ -308,6 +390,13 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .invitation .mobile-copy{background:linear-gradient(#211756,#12102b)}
   .dress .mobile-copy{padding-bottom:20px}
   .wishlist .mobile-copy{color:#55162e;background:#f4b9cd}
+  .program .mobile-copy{background:linear-gradient(#2a3fd0,#1d2c9c)}
+  .finale{grid-template-columns:1fr;padding:0 0 44px;gap:0}
+  .finale-video{grid-column:1;width:100%;height:auto}
+  .finale-video video{border-radius:0;-webkit-mask:linear-gradient(#000 88%,transparent);mask:linear-gradient(#000 88%,transparent)}
+  .finale-sound{top:16px;bottom:auto}
+  .finale-copy{grid-column:1;grid-row:2;margin-top:-6%;padding:0 24px}
+  .contacts{order:2;flex-basis:100%}
   .wishlist .eyebrow{color:#853650}
   .scroll-link{bottom:6%;padding:8px 14px;font-size:9px;gap:8px}
   .scroll-arrow{font-size:13px}
@@ -337,10 +426,17 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .countdown{justify-self:stretch}
   .date-details dd{font-size:20px}
   .date-note{text-align:left;font-size:16px}
-  .wishlist-empty{justify-content:flex-start;padding:24px;gap:16px}
+  .prize-panel{position:static;aspect-ratio:auto;padding:18px 20px 4px;background:#f4b9cd}
+  .prize-card,.prize-status{position:static;width:auto}
+  .prize-card{padding:18px;border-radius:16px}
+  .prize-title{font-size:24px}
+  .prize-actions{gap:14px;margin-top:14px}
+  .prize-split{margin-top:12px;font-size:13px}
+  .prize-status{padding:14px 18px;margin-bottom:10px;border-radius:16px;font-size:20px}
+  .my-bookings{justify-content:flex-start;padding:24px;gap:16px}
   .heart{font-size:42px}
-  .wishlist-empty h3{font-size:22px;line-height:1.2}
-  .wishlist-empty p{font-size:13px;line-height:1.5}
+  .my-bookings h3{font-size:22px;line-height:1.2}
+  .my-bookings p{font-size:13px;line-height:1.5}
   footer{padding:30px 24px;flex-wrap:wrap;gap:18px}
   footer p{max-width:none;text-align:left;order:3;flex-basis:100%;margin:0}
   .back-top{margin-left:auto}

@@ -1,1 +1,4 @@
 .DS_Store
+reservations*.json
+__pycache__/
+splits*.json

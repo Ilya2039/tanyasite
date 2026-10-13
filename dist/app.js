@@ -1,3 +1,8 @@
+// Always open on the first slide: ignore a leftover #section in the link and the browser's restored scroll.
+if('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if(location.hash) history.replaceState(null, '', location.pathname + location.search);
+window.scrollTo(0, 0);
+window.addEventListener('load', () => { if(window.scrollY < 50 || document.querySelector('#welcome[open]')) window.scrollTo(0, 0); }, {once:true});
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const isMobile = window.matchMedia('(max-width: 600px)');
 const rand = (min, max) => min + Math.random() * (max - min);
@@ -95,13 +100,15 @@ function makeSpan(className, vars, text){
   Object.entries(vars).forEach(([key,value]) => el.style.setProperty('--' + key, value));
   if(text) el.textContent = text; return el;
 }
-const sparkleColors = {home:['#ffe1fa','#c9d4ff'], invitation:['#ead6ff','#ffc3df'], date:['#fa78b2','#ffd1e6'], 'dress-code':['#fff6d6','#ffffff'], wishlist:['#ffffff','#ffe2ec']};
+const sparkleColors = {home:['#ffe1fa','#c9d4ff'], invitation:['#ead6ff','#ffc3df'], date:['#fa78b2','#ffd1e6'], program:['#ffffff','#ffc2d9'], 'dress-code':['#fff6d6','#ffffff'], wishlist:['#ffffff','#ffe2ec']};
+// Keep floating bits out of the wishlist claw's column (about 20–58% across).
+const clawFreeX = (min, max) => { let x; do x = rand(min, max); while(x > 20 && x < 58); return x; };
 document.querySelectorAll('.sparkles').forEach(layer => {
   const symbols = layer.dataset.symbols.split(' ');
   const id = layer.closest('section').id;
   const count = isMobile.matches ? 8 : 16;
   for(let i=0;i<count;i++){
-    layer.append(makeSpan('sparkle',{x:rand(3,95)+'%', y:rand(8,90)+'%', size:rand(14,40)+'px', dur:rand(5,10)+'s', delay:-rand(0,10)+'s', c:pick(sparkleColors[id] || ['#ffc3df'])}, pick(symbols)));
+    layer.append(makeSpan('sparkle',{x:(id === 'wishlist' ? clawFreeX(3,95) : rand(3,95))+'%', y:rand(8,90)+'%', size:rand(14,40)+'px', dur:rand(5,10)+'s', delay:-rand(0,10)+'s', c:pick(sparkleColors[id] || ['#ffc3df'])}, pick(symbols)));
   }
 });
 // Twinkling stars only in the sky above the pink table.
@@ -116,12 +123,9 @@ for(let i=0;i<10;i++) bubbles.append(makeSpan('bubble',{x:rand(45,53)+'%', s:ran
 const bulbs = document.querySelector('.bulbs');
 const bulbY = [38.1,44.1,50.1,56,61.9,67.9];
 [...bulbY.slice().reverse().map(y => [20.15,y]), ...bulbY.map(y => [79.4,y])].forEach(([x,y],i) => bulbs.append(makeSpan('bulb',{x:x+'%', y:y+'%', i})));
-// Glints on the bag and the claw.
-const glints = document.querySelector('.glints');
-[[33,45],[44,52],[37,64],[30,58],[39,16],[47,40],[41,37]].forEach(([x,y],i) => glints.append(makeSpan('glint',{x:x+'%', y:y+'%', s:rand(2.5,4.5)+'%', dur:rand(2.4,4)+'s', delay:-(i*.7)+'s'})));
 // Hearts floating up from the pile.
 const rising = document.querySelector('.rising');
-for(let i=0;i<(isMobile.matches ? 8 : 16);i++) rising.append(makeSpan('rise',{x:rand(2,95)+'%', size:rand(18,46)+'px', dur:rand(7,13)+'s', delay:-rand(0,13)+'s', dx:rand(-40,40)+'px', c:pick(['#ff2e63','#ff5c8a','#ffffff','#ff8fb1','#e8124f'])}, '♥'));
+for(let i=0;i<(isMobile.matches ? 8 : 16);i++) rising.append(makeSpan('rise',{x:clawFreeX(2,95)+'%', size:rand(18,46)+'px', dur:rand(7,13)+'s', delay:-rand(0,13)+'s', dx:rand(-40,40)+'px', c:pick(['#ff2e63','#ff5c8a','#ffffff','#ff8fb1','#e8124f'])}, '♥'));
 
 // ---------- Scroll reveal, parallax, pointer depth ----------
 const scenes = [...document.querySelectorAll('.scene')];
@@ -182,7 +186,7 @@ const photoAreas = [[3,38,56,92],[42,71,51,92]];
 })();
 
 // ---------- Countdown ----------
-const partyStart = new Date('2026-11-15T00:00:00+03:00');
+const partyStart = new Date('2026-11-15T18:45:00+03:00');
 const countdown = document.querySelector('.countdown');
 const cdNums = Object.fromEntries([...document.querySelectorAll('.cd-num')].map(el => [el.dataset.unit, el]));
 function updateCountdown(){
@@ -376,3 +380,263 @@ setInterval(() => {
 }, 3200);
 renderLever(0);
 populateReels(); welcome.showModal();
+
+// ---------- Wishlist claw: the empty claw dives into the hearts, pulls a prize out, guests can book it ----------
+{
+  const rig = document.querySelector('.claw-rig');
+  const arms = [rig.querySelector('.claw-arm.left'), rig.querySelector('.claw-arm.right')];
+  const slot = rig.querySelector('.claw-prize');
+  const scene = rig.closest('.scene');
+  const card = scene.querySelector('.prize-card');
+  const title = card.querySelector('.prize-title');
+  const bookButton = card.querySelector('.prize-book');
+  const nextButton = card.querySelector('.prize-next');
+  const status = scene.querySelector('.prize-status');
+  const splitButton = card.querySelector('.prize-split');
+  const splitCount = card.querySelector('.prize-split-count');
+  const splitDialog = document.querySelector('#split-dialog');
+  const splitForm = splitDialog.querySelector('form');
+  const splitError = splitDialog.querySelector('.book-error');
+  const dialog = document.querySelector('#book-dialog');
+  const dialogError = dialog.querySelector('.book-error');
+  const mine = scene.querySelector('.my-bookings');
+  const DEPTH = '0 45%';
+  const HOLD = 7000;
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const ready = () => scene.classList.contains('in-view') && document.visibilityState === 'visible';
+  const move = (el, frames, duration, easing = 'ease-in-out') => el.animate(frames, {duration, easing, fill:'forwards'}).finished;
+
+  let items = [], reserved = new Set(), index = -1, current = null;
+  let item = slot.querySelector('img');
+
+  // Bookings made in this browser, so the guest can see and cancel them.
+  const loadMine = () => { try { return JSON.parse(localStorage.getItem('wishlist-bookings')) || []; } catch { return []; } };
+  const saveMine = list => { try { localStorage.setItem('wishlist-bookings', JSON.stringify(list)); } catch {} };
+  function renderMine(){
+    const list = loadMine().filter(b => items.some(i => i.id === b.id));
+    const ul = mine.querySelector('ul'); ul.replaceChildren();
+    list.forEach(b => {
+      const data = items.find(i => i.id === b.id);
+      const li = document.createElement('li');
+      const icon = Object.assign(document.createElement('img'), {src:data.img, alt:'', loading:'lazy'});
+      const info = document.createElement('div');
+      const link = Object.assign(document.createElement('a'), {className:'booked-title', href:data.url, target:'_blank', rel:'noopener', textContent:data.title});
+      info.append(link);
+      if(data.price) info.append(Object.assign(document.createElement('span'), {className:'booked-price', textContent:data.price}));
+      const cancel = Object.assign(document.createElement('button'), {type:'button', textContent:'Отменить бронь'});
+      cancel.addEventListener('click', async () => {
+        if(!confirm(`Отменить бронь «${data.title}»? Подарок снова станет доступен другим.`)) return;
+        try {
+          const res = await fetch('/api/cancel', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:b.id, token:b.token})});
+          if(!res.ok && res.status !== 403) throw new Error();
+          saveMine(loadMine().filter(x => x.id !== b.id)); reserved.delete(b.id); renderMine();
+        } catch { alert('Не получилось отменить бронь. Попробуй ещё раз чуть позже.'); }
+      });
+      info.append(cancel); li.append(icon, info); ul.append(li);
+    });
+    mine.hidden = !list.length;
+  }
+
+  async function refresh(){
+    try {
+      const res = await fetch('/api/reservations', {cache:'no-store'});
+      if(res.ok) reserved = new Set((await res.json()).reserved);
+    } catch {}
+  }
+  const available = () => items.filter(i => !reserved.has(i.id));
+  function pickNext(){
+    for(let step = 1; step <= items.length; step++){
+      const candidate = items[(index + step) % items.length];
+      if(!reserved.has(candidate.id)){ index = items.indexOf(candidate); return candidate; }
+    }
+    return null;
+  }
+
+  // Swing both claws about their knuckles: positive opens, 0 is the grip on a prize.
+  let spread = 0;
+  const grip = (to, duration) => {
+    const from = spread; spread = to;
+    return Promise.all(arms.map((arm, i) => {
+      const dir = i ? -1 : 1;
+      return move(arm, [{rotate:`${from * dir}deg`},{rotate:`${to * dir}deg`}], duration, 'cubic-bezier(.3,.7,.3,1)');
+    }));
+  };
+
+  // While a prize hangs in the claw: show its card and wait for "next", a booking, or the timeout.
+  let decide = null;
+  const hovering = () => card.matches(':hover') || card.contains(document.activeElement) || dialog.open || splitDialog.open;
+  function waitForGuest(){
+    return new Promise(resolve => {
+      decide = resolve;
+      let left = HOLD;
+      const tick = setInterval(() => {
+        if(!hovering() && ready()) left -= 250;
+        if(left <= 0){ clearInterval(tick); decide = null; resolve('next'); }
+      }, 250);
+      const done = result => { clearInterval(tick); decide = null; resolve(result); };
+      decide = done;
+    });
+  }
+  function showCard(prize){
+    title.textContent = prize.title; title.href = prize.url;
+    card.hidden = false; status.textContent = '';
+    splitButton.hidden = !prize.split; splitCount.textContent = '';
+    if(prize.split) loadSplits(prize).then(people => { if(current === prize) splitCount.textContent = people.length || ''; });
+  }
+
+  // Splitting the price of a pricey gift: guests leave a contact and find each other.
+  const loadMySplits = () => { try { return JSON.parse(localStorage.getItem('wishlist-splits')) || []; } catch { return []; } };
+  const saveMySplits = list => { try { localStorage.setItem('wishlist-splits', JSON.stringify(list)); } catch {} };
+  async function loadSplits(prize){
+    try {
+      const res = await fetch(`/api/splits?id=${encodeURIComponent(prize.id)}`, {cache:'no-store'});
+      return res.ok ? (await res.json()).people : [];
+    } catch { return []; }
+  }
+  function contactLink(contact){
+    const handle = contact.match(/^(?:@|https?:\/\/t\.me\/|t\.me\/)([\w\d_]{3,})$/i);
+    if(handle) return `https://t.me/${handle[1]}`;
+    const digits = contact.replace(/[^\d+]/g, '');
+    if(/^\+?\d{10,13}$/.test(digits)) return `tel:${digits}`;
+    return null;
+  }
+  let splitPrize = null;
+  async function renderSplits(){
+    const prize = splitPrize;
+    const people = await loadSplits(prize);
+    if(prize !== splitPrize) return;
+    const mineHere = loadMySplits().filter(m => m.id === prize.id);
+    const box = splitDialog.querySelector('.split-people');
+    const ul = box.querySelector('ul'); ul.replaceChildren();
+    people.forEach(person => {
+      const li = document.createElement('li');
+      const href = contactLink(person.contact);
+      const contact = href ? Object.assign(document.createElement('a'), {href, target:'_blank', rel:'noopener', textContent:person.contact}) : Object.assign(document.createElement('span'), {textContent:person.contact});
+      li.append(Object.assign(document.createElement('b'), {textContent:person.name}), contact);
+      const own = mineHere.find(m => m.name === person.name && m.contact === person.contact);
+      if(own){
+        const remove = Object.assign(document.createElement('button'), {type:'button', textContent:'убрать'});
+        remove.addEventListener('click', async () => {
+          try {
+            await fetch('/api/split/cancel', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:prize.id, token:own.token})});
+            saveMySplits(loadMySplits().filter(m => m.token !== own.token)); renderSplits();
+          } catch {}
+        });
+        li.append(remove);
+      }
+      ul.append(li);
+    });
+    box.hidden = !people.length;
+    if(current === prize) splitCount.textContent = people.length || '';
+  }
+  splitButton.addEventListener('click', () => {
+    if(!current) return;
+    splitPrize = current;
+    splitDialog.querySelector('.split-name').textContent = current.title;
+    splitForm.elements.name.value = splitForm.elements.name.value || guest.name;
+    splitError.hidden = true;
+    splitDialog.showModal(); renderSplits();
+  });
+  splitDialog.querySelector('.book-cancel').addEventListener('click', () => splitDialog.close());
+  splitForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const name = splitForm.elements.name.value.trim(), contact = splitForm.elements.contact.value.trim();
+    if(!name || !contact || !splitPrize) return;
+    try {
+      const res = await fetch('/api/split', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:splitPrize.id, name, contact})});
+      if(!res.ok) throw new Error();
+      const {token} = await res.json();
+      saveMySplits([...loadMySplits(), {id:splitPrize.id, token, name:name.replace(/\s+/g, ' '), contact:contact.replace(/\s+/g, ' ')}]);
+      splitForm.elements.contact.value = '';
+      splitError.hidden = true;
+      await renderSplits();
+    } catch {
+      splitError.textContent = 'Не получилось сохранить контакт. Попробуй ещё раз чуть позже.';
+      splitError.hidden = false;
+    }
+  });
+  nextButton.addEventListener('click', () => decide && decide('next'));
+  bookButton.addEventListener('click', () => {
+    if(!current) return;
+    dialog.querySelector('.book-name').textContent = current.title;
+    dialog.querySelector('.book-guest').textContent = guest.name || 'гость';
+    dialogError.hidden = true;
+    dialog.showModal();
+  });
+  dialog.addEventListener('close', async () => {
+    if(dialog.returnValue !== 'confirm' || !current) return;
+    const prize = current;
+    try {
+      const res = await fetch('/api/reserve', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:prize.id, name:guest.name})});
+      if(res.status === 409){ reserved.add(prize.id); status.textContent = 'Упс, этот подарок только что забронировали ♡'; decide && decide('gone'); return; }
+      if(!res.ok) throw new Error();
+      const {token} = await res.json();
+      saveMine([...loadMine().filter(b => b.id !== prize.id), {id:prize.id, token}]);
+      reserved.add(prize.id); renderMine();
+      status.textContent = `«${prize.title}» — забронировано за тобой ♡`;
+      decide && decide('booked');
+    } catch {
+      dialogError.textContent = 'Не получилось забронировать. Проверь интернет и попробуй ещё раз.';
+      dialogError.hidden = false; dialog.showModal();
+    }
+  });
+
+  (async () => {
+    try { items = await (await fetch('wishlist.json', {cache:'no-cache'})).json(); } catch { return; }
+    items.forEach(prize => { const img = new Image(); img.src = prize.img; });
+    await refresh(); renderMine();
+    setInterval(refresh, 20000);
+    while(true){
+      while(!ready()) await pause(400);
+      if(current){
+        showCard(current);
+        const sway = reducedMotion.matches ? null : item.animate([{rotate:'0deg'},{rotate:'3deg'},{rotate:'-2.5deg'},{rotate:'1.5deg'},{rotate:'0deg'}], {duration:2400, iterations:Infinity, easing:'ease-in-out'});
+        const result = await waitForGuest();
+        sway?.cancel(); card.hidden = true;
+        // Poof: the prize is taken.
+        const r = item.getBoundingClientRect();
+        if(r.width && !reducedMotion.matches) fx.burst(r.left + r.width / 2, r.top + r.height / 2, result === 'booked' ? 40 : 14);
+        await move(item, [{scale:1, opacity:1, filter:'blur(0)'},{scale:1.18, opacity:0, filter:'blur(6px)'}], reducedMotion.matches ? 1 : 480, 'ease-in');
+        current = null;
+        if(result !== 'next') await pause(1800);
+        status.textContent = '';
+      }
+      await refresh();
+      const prize = pickNext();
+      if(!prize){
+        status.textContent = 'Все подарки уже разобрали ♡ Спасибо!';
+        await pause(15000);
+        continue;
+      }
+      const next = new Image(); next.alt = ''; next.src = prize.img;
+      await next.decode().catch(() => {});
+      if(reducedMotion.matches){ item.replaceWith(next); item = next; current = prize; continue; }
+      await pause(250);
+      // Open the empty claw and send it down into the hearts.
+      await grip(16, 420);
+      await move(rig, [{translate:'0 0'},{translate:DEPTH}], 1500);
+      item.replaceWith(next); item = next;
+      await grip(0, 380);
+      await grip(-2, 120); await grip(0, 160);
+      // Pull it out and lift it up, with a little wobble.
+      move(item, [{rotate:'0deg'},{rotate:'-3deg', offset:.3},{rotate:'2deg', offset:.7},{rotate:'0deg'}], 1700);
+      await move(rig, [{translate:DEPTH},{translate:'0 0'}], 1700, 'cubic-bezier(.45,0,.25,1)');
+      current = prize;
+    }
+  })();
+}
+
+// ---------- Finale: the kittens video plays only while it is on screen ----------
+{
+  const video = document.querySelector('.finale video');
+  const sound = document.querySelector('.finale-sound');
+  new IntersectionObserver(([entry]) => {
+    if(entry.isIntersecting && !reducedMotion.matches) video.play().catch(() => {}); else video.pause();
+  }, {threshold:.25}).observe(video);
+  sound.addEventListener('click', () => {
+    video.muted = !video.muted;
+    sound.setAttribute('aria-pressed', String(!video.muted));
+    sound.lastChild.textContent = video.muted ? ' Со звуком' : ' Без звука';
+    if(!video.muted) video.play().catch(() => {});
+  });
+}

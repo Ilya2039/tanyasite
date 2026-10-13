@@ -1,0 +1,19 @@
+[
+  {"id": "irnby", "title": "Подарочный сертификат IRNBY", "url": "https://irnby.com/gift-certificate", "img": "assets/wish-1.webp", "price": "от 1 000 ₽"},
+  {"id": "2mood", "title": "Сертификат в магазин 2MOOD", "url": "https://www.2moodstore.com/collection/gift-cards?product=podarochnaya_karta_dizayn_1", "img": "assets/wish-16.webp", "price": "5 000 ₽"},
+  {"id": "greenfield", "title": "Подарочный набор чая Greenfield", "url": "https://www.ozon.ru/product/nabor-chaya-greenfield-v-paketikah-podarochnyy-nabor-v-derevyannoy-shkatulke-8-vidov-96-sht-33006486/", "img": "assets/wish-3.webp"},
+  {"id": "kotomka", "title": "Подарочный сертификат Kotomka", "url": "https://kotomkazero.ru/", "img": "assets/wish-4.webp", "price": "от 1 000 ₽"},
+  {"id": "plate", "title": "Тарелка", "url": "https://nedushno.shop/tarelki/tproduct/674756683243-predzakaz-tarelka-zaichik-ya-fanat-takoi", "img": "assets/wish-5.webp", "price": "2 900 ₽"},
+  {"id": "dumbbells", "title": "Сборные гантели", "url": "https://market.yandex.ru/cc/BHMFFC", "img": "assets/wish-6.webp", "price": "≈ 5 500 ₽"},
+  {"id": "labubu-angel", "title": "Labubu ZIMOMO Angel", "url": "https://www.avito.ru/moskva/kollektsionirovanie/pop_mart_labubu_angel_in_clouds_labubu_zimomo_7742049910", "img": "assets/wish-7.webp", "split": true},
+  {"id": "labubu-fall-in-wild", "title": "Labubu Fall in Wild", "url": "https://www.avito.ru/moskva/kollektsionirovanie/labubu_fall_in_wild_7801249333", "img": "assets/wish-8.webp", "split": true},
+  {"id": "labubu-hide-and-seek", "title": "Labubu Hide and Seek", "url": "https://www.avito.ru/moskva/tovary_dlya_detey_i_igrushki/originalnaya_igrushka_hide_and_seek_17_sm_8013454396", "img": "assets/wish-9.webp", "split": true},
+  {"id": "labubu-flip-with-me", "title": "Labubu Flip with me", "url": "https://www.avito.ru/moskva/tovary_dlya_detey_i_igrushki/labubu_flip_with_me_original_7769074677", "img": "assets/wish-10.webp", "split": true},
+  {"id": "vans-monsters", "title": "Кеды Vans x The Monsters", "url": "https://www.joom.ru/ru/products/675f4f66e4e2400128d43ee6?variant_id=675f4f66e4e2400128d43eec", "img": "assets/wish-11.webp", "price": "19 990 ₽"},
+  {"id": "powerbank", "title": "Пауэрбанк беспроводной", "url": "https://market.yandex.ru/cc/BHMFoU", "img": "assets/wish-12.webp", "price": "≈ 5 000 ₽"},
+  {"id": "pijama", "title": "Пижама IAMPIJAMA, размер 44", "url": "https://iampijama.ru/catalog/pizhamy/pizhama_so_shtanami_pizhama_troyka/pizhama_olenenok_futbolka_s_bryukami_korichnevyy/?oid=28693", "img": "assets/wish-13.webp", "price": "4 990 ₽"},
+  {"id": "eni", "title": "Сертификат на спортинвентарь ENI", "url": "https://eni-brand.ru/present", "img": "assets/wish-2.webp", "price": "5 000 ₽"},
+  {"id": "gloves", "title": "Перчатки для фитнеса Hello Fitty", "url": "https://jaygym.ru/all/tproduct/751631197942-perchatki-hello-fitty", "img": "assets/wish-14.webp", "price": "1 190 ₽"},
+  {"id": "tea-pair", "title": "Чайная пара", "url": "https://www.ipm.ru/product/chashka-s-blyudtsem-kofeynaya-f-idilliya-r-astra-2-art-81-32374-00-1/", "img": "assets/wish-15.webp", "price": "3 900 ₽"},
+  {"id": "goldapple", "title": "Подарочная карта Золотое Яблоко", "url": "https://goldapple.ru/cards", "img": "assets/wish-17.webp", "price": "сумма на выбор"}
+]

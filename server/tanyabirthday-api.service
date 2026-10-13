@@ -1,0 +1,13 @@
+[Unit]
+Description=Tanya birthday wishlist booking API
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+StateDirectory=tanyabirthday
+ExecStart=/usr/bin/python3 /var/www/tanyabirthday/server/reserve.py --port 8091 --data /var/lib/tanyabirthday/reservations.json --items /var/www/tanyabirthday/dist/wishlist.json
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
