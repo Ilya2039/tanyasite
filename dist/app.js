@@ -4,7 +4,7 @@ if(location.hash) history.replaceState(null, '', location.pathname + location.se
 window.scrollTo(0, 0);
 window.addEventListener('load', () => { if(window.scrollY < 50 || document.querySelector('#welcome[open]')) window.scrollTo(0, 0); }, {once:true});
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const isMobile = window.matchMedia('(max-width: 600px)');
+const isMobile = window.matchMedia('(max-width: 600px), (pointer: coarse) and (max-width: 900px)');
 const rand = (min, max) => min + Math.random() * (max - min);
 const pick = list => list[Math.floor(Math.random() * list.length)];
 
@@ -26,7 +26,7 @@ const fx = (() => {
   const palette = ['#ff8dbc','#ff3d8b','#ffd59a','#ffffff','#b9a2ff','#ffc2da'];
   let width = 0, height = 0, running = false, last = 0;
   function resize(){
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobile.matches ? 1.5 : 2);
     width = window.innerWidth; height = window.innerHeight;
     canvas.width = width * dpr; canvas.height = height * dpr;
     ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -106,14 +106,14 @@ const clawFreeX = (min, max) => { let x; do x = rand(min, max); while(x > 20 && 
 document.querySelectorAll('.sparkles').forEach(layer => {
   const symbols = layer.dataset.symbols.split(' ');
   const id = layer.closest('section').id;
-  const count = isMobile.matches ? 8 : 16;
+  const count = isMobile.matches ? 5 : 16;
   for(let i=0;i<count;i++){
     layer.append(makeSpan('sparkle',{x:(id === 'wishlist' ? clawFreeX(3,95) : rand(3,95))+'%', y:rand(8,90)+'%', size:rand(14,40)+'px', dur:rand(5,10)+'s', delay:-rand(0,10)+'s', c:pick(sparkleColors[id] || ['#ffc3df'])}, pick(symbols)));
   }
 });
 // Twinkling stars only in the sky above the pink table.
 const twinkles = document.querySelector('.twinkles');
-for(let i=0;i<(isMobile.matches ? 30 : 60);i++){
+for(let i=0;i<(isMobile.matches ? 18 : 60);i++){
   const x = rand(1,99); const maxY = 54 + x * .2;
   twinkles.append(makeSpan('tw',{x:x+'%', y:rand(2,maxY)+'%', s:rand(1.5,3.5)+'px', dur:rand(1.8,4.5)+'s', delay:-rand(0,4)+'s'}));
 }
@@ -125,7 +125,7 @@ const bulbY = [38.1,44.1,50.1,56,61.9,67.9];
 [...bulbY.slice().reverse().map(y => [20.15,y]), ...bulbY.map(y => [79.4,y])].forEach(([x,y],i) => bulbs.append(makeSpan('bulb',{x:x+'%', y:y+'%', i})));
 // Hearts floating up from the pile.
 const rising = document.querySelector('.rising');
-for(let i=0;i<(isMobile.matches ? 8 : 16);i++) rising.append(makeSpan('rise',{x:clawFreeX(2,95)+'%', size:rand(18,46)+'px', dur:rand(7,13)+'s', delay:-rand(0,13)+'s', dx:rand(-40,40)+'px', c:pick(['#ff2e63','#ff5c8a','#ffffff','#ff8fb1','#e8124f'])}, '♥'));
+for(let i=0;i<(isMobile.matches ? 5 : 16);i++) rising.append(makeSpan('rise',{x:clawFreeX(2,95)+'%', size:rand(18,46)+'px', dur:rand(7,13)+'s', delay:-rand(0,13)+'s', dx:rand(-40,40)+'px', c:pick(['#ff2e63','#ff5c8a','#ffffff','#ff8fb1','#e8124f'])}, '♥'));
 
 // ---------- Scroll reveal, parallax, pointer depth ----------
 const scenes = [...document.querySelectorAll('.scene')];
@@ -155,7 +155,8 @@ function tick(){
   const vh = window.innerHeight;
   const max = document.documentElement.scrollHeight - vh;
   progress.style.setProperty('--p', max > 0 ? (window.scrollY / max).toFixed(4) : 0);
-  if(!reducedMotion.matches){
+  // Parallax is a desktop nicety; phones skip the per-frame layout work.
+  if(!reducedMotion.matches && !isMobile.matches){
     sceneState.forEach((state, scene) => {
       if(!scene.classList.contains('in-view')) return;
       const rect = scene.getBoundingClientRect();
@@ -583,7 +584,6 @@ populateReels(); welcome.showModal();
 
   (async () => {
     try { items = await (await fetch('wishlist.json', {cache:'no-cache'})).json(); } catch { return; }
-    items.forEach(prize => { const img = new Image(); img.src = prize.img; });
     await refresh(); renderMine();
     setInterval(refresh, 20000);
     while(true){
