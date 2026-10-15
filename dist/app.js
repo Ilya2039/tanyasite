@@ -2,6 +2,9 @@
 if('scrollRestoration' in history) history.scrollRestoration = 'manual';
 if(location.hash) history.replaceState(null, '', location.pathname + location.search);
 window.scrollTo(0, 0);
+// Drop any service worker and caches left on this domain by the other app it briefly pointed to.
+if('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(list => list.forEach(r => r.unregister())).catch(() => {});
+if('caches' in window) caches.keys().then(keys => keys.forEach(key => caches.delete(key))).catch(() => {});
 window.addEventListener('load', () => { if(window.scrollY < 50 || document.querySelector('#welcome[open]')) window.scrollTo(0, 0); }, {once:true});
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 // Portrait phones get the tall artwork (assets/m/*), so effects placed in % need their own coordinates.
