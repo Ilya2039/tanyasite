@@ -128,7 +128,7 @@ for(let i=0;i<10;i++) bubbles.append(makeSpan('bubble',{x:(portrait.matches ? ra
 const bulbs = document.querySelector('.bulbs');
 function placeBulbs(){
   const [bulbY, left, right] = portrait.matches
-    ? [[41.26,43.92,46.59,49.22,51.89,54.52,57.06], 12.8, 86.4]
+    ? [[38.87,41.53,44.22,46.89,49.57,52.27,54.9], 13.8, 85.9]
     : [[38.1,44.1,50.1,56,61.9,67.9], 20.15, 79.4];
   bulbs.replaceChildren();
   [...bulbY.slice().reverse().map(y => [left,y]), ...bulbY.map(y => [right,y])].forEach(([x,y],i) => bulbs.append(makeSpan('bulb',{x:x+'%', y:y+'%', i})));
@@ -283,7 +283,7 @@ nameForm.addEventListener('submit', event => {
   event.preventDefault(); const name = nameInput.value.trim().replace(/\s+/g,' ');
   if(!name){ nameInput.setCustomValidity('Напиши своё имя'); nameInput.reportValidity(); return; }
   nameInput.setCustomValidity(''); guest = {name, salutation:nameForm.elements.salutation.value === 'Дорогой' ? 'Дорогой' : 'Дорогая'};
-  document.querySelectorAll('.personal-greeting').forEach(el => { el.textContent = `${guest.salutation} ${guest.name}!`; });
+  document.querySelectorAll('.personal-greeting').forEach(el => { const name = document.createElement('b'); name.textContent = `${guest.name}!`; el.replaceChildren(`${guest.salutation} `, name); });
   scrollText.textContent = `${guest.name}, твоё приглашение`;
   try { sessionStorage.setItem('birthday-guest', JSON.stringify(guest)); } catch {}
   const firstTime = !accepted;
@@ -303,8 +303,8 @@ function leverGeometry(){
   const tall = portrait.matches;
   const vb = tall ? {w:100, h:216.53} : {w:160, h:90};
   const at = (x, y) => ({x:x * vb.w / 100, y:y * vb.h / 100});
-  const root = tall ? at(92, 46.3) : at(84.4, 48.6), rest = tall ? at(91.8, 36) : at(85.1, 30.2);
-  GEO = {vb, root, rest, arm:Math.hypot(rest.x - root.x, rest.y - root.y), radius:tall ? 3.56 : 3.52, width:tall ? 2.2 : 1.5, travel:tall ? .2 : .36};
+  const root = tall ? at(91.4, 44.1) : at(84.4, 48.6), rest = tall ? at(91.2, 34.1) : at(85.1, 30.2);
+  GEO = {vb, root, rest, arm:Math.hypot(rest.x - root.x, rest.y - root.y), radius:tall ? 4.2 : 3.52, width:tall ? 2.5 : 1.5, travel:tall ? .2 : .36};
   leverSvg.setAttribute('viewBox', `0 0 ${vb.w} ${vb.h}`);
 }
 leverGeometry();
@@ -423,7 +423,7 @@ populateReels(); welcome.showModal();
   const dialogError = dialog.querySelector('.book-error');
   const mine = scene.querySelector('.my-bookings');
   // How far the rig drops so the claws bury into the hearts (in % of the scene's height).
-  const depth = () => portrait.matches ? '0 61%' : '0 45%';
+  const depth = () => portrait.matches ? '0 22.5%' : '0 45%';
   const HOLD = 7000;
   const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
   const ready = () => scene.classList.contains('in-view') && document.visibilityState === 'visible';
@@ -637,13 +637,13 @@ populateReels(); welcome.showModal();
       // Open the empty claw and send it down into the hearts.
       await grip(16, 420);
       const DEPTH = depth();
-      await move(rig, [{translate:'0 0'},{translate:DEPTH}], portrait.matches ? 2100 : 1500);
+      await move(rig, [{translate:'0 0'},{translate:DEPTH}], portrait.matches ? 1400 : 1500);
       item.replaceWith(next); item = next;
       await grip(0, 380);
       await grip(-2, 120); await grip(0, 160);
       // Pull it out and lift it up, with a little wobble.
       move(item, [{rotate:'0deg'},{rotate:'-3deg', offset:.3},{rotate:'2deg', offset:.7},{rotate:'0deg'}], 1700);
-      await move(rig, [{translate:DEPTH},{translate:'0 0'}], portrait.matches ? 2300 : 1700, 'cubic-bezier(.45,0,.25,1)');
+      await move(rig, [{translate:DEPTH},{translate:'0 0'}], portrait.matches ? 1600 : 1700, 'cubic-bezier(.45,0,.25,1)');
       current = prize;
     }
   })();
