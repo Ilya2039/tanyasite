@@ -415,6 +415,8 @@ nav span{font-size:16px;padding-left:5px}
 .card-text span{position:absolute;left:0;bottom:-.24em;white-space:nowrap;font:italic 500 calc(min(100vw,1920px) * 27 / 1920) var(--serif);color:#2b0718;letter-spacing:.01em;font-variant-numeric:lining-nums}
 .ct-a{left:41.8%;top:54.07%}.ct-b{left:42.97%;top:57.69%}.ct-time{left:50.6%;top:56.75%}
 .glass-shimmer-2{display:none}
+.scorpion,.card-img,.fingertip,.glasses{display:none}
+.card-spin,.card-face{position:absolute;inset:0}
 .card-time span{font-size:calc(min(100vw,1920px) * 36 / 1920);font-style:normal}
 .venue-link{border-bottom:1px solid #ffffff40}
 .venue-link:hover{color:var(--pink)}
@@ -603,8 +605,8 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .lever-guide{left:91.3%;top:36%;height:10%;width:2px}
   .chip-one{clip-path:ellipse(12.7% 5.9% at 19.9% 26.2%)!important;transform-origin:19.9% 26.2%!important}
   .chip-two{clip-path:ellipse(13.3% 6.1% at 82% 65.6%)!important;transform-origin:82% 65.6%!important}
-  .date .art-detail{background-image:url(assets/m/date.webp)!important}
-  .dress .art-detail{background-image:url(assets/m/dress.webp)!important}
+  .date .art-detail{background-image:url(assets/m/date.webp?v=3)!important}
+  .dress .art-detail{background-image:url(assets/m/dress.webp?v=3)!important}
   .card-glow{left:48.8%;top:46.6%;width:80%}
   .card-text{rotate:-25.5deg}
   .card-text span{font-size:calc(100vw * 38 / 1125)}
@@ -613,6 +615,20 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .neon{clip-path:inset(21.5% 4% 69.5% 2%)!important}
   .glass-shimmer{clip-path:inset(0 0 79% 0)!important}
   .glass-shimmer-2{clip-path:inset(77% 0 0 0)}
+  /* Phone-only animated layers cut out of the art: scorpion, spinning card, bobbing glasses */
+  .scorpion{display:block;position:absolute;left:34.49%;top:49.3%;width:29.87%;height:14.9%}
+  .scorpion img{width:100%;height:100%;display:block}
+  .scorpion.is-walking img{animation:scuttle .16s linear infinite alternate}
+  .card-img,.fingertip{display:block;position:absolute}
+  .card-img{left:17.067%;top:29.351%;width:63.733%;height:34.811%}
+  .fingertip{left:44.978%;top:29.762%;width:8.533%;height:3.9%}
+  .card-spin{transform-origin:48.761% 46.846%}
+  .card-face{transform-origin:48.761% 46.846%}
+  .card-back{visibility:hidden;transform:rotate(-23.62deg) scaleX(-1) rotate(23.62deg)}
+  .dress:not(.in-view) .glass-sprite{animation-play-state:paused}
+  .glass-shimmer{display:none}
+  .glasses{display:block;inset:0}
+  .glass-sprite{position:absolute;max-width:none;animation:glass-bob 4.6s calc(var(--i) * .32s) ease-in-out infinite}
   .claw{left:29.8%;top:45%;width:35.6%;height:15.18%}
   .claw-cable{left:47.75%;width:.6%;height:145.2%;-webkit-mask-image:linear-gradient(transparent 96.5%,#000 99.5%);mask-image:linear-gradient(transparent 96.5%,#000 99.5%)}
   .claw-prize{left:27.05%;top:57.56%;width:45.9%;height:15.8%}
@@ -663,6 +679,8 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .my-bookings{animation:none}
 }
 @media(max-width:600px){.art-detail,.sheen{display:block}}
+@keyframes glass-bob{0%,100%{translate:0 0}14%,50%{translate:0 -13%}66%{translate:0 0}}
+@keyframes scuttle{from{rotate:-1.6deg;translate:0 0}to{rotate:1.6deg;translate:0 -.6%}}
 @keyframes hint-bob{0%,100%{translate:0 -100%}50%{translate:0 -70%}}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}

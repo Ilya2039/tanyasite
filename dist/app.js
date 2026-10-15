@@ -649,6 +649,72 @@ populateReels(); welcome.showModal();
   })();
 }
 
+// ---------- Phone hero: the scorpion crawls across the table, climbs the glass and drops in ----------
+{
+  const bug = document.querySelector('.scorpion');
+  const hero = bug.closest('.scene');
+  // Path of the sprite's centre in art pixels (1125×2436), its turn and size; it ends where the art had it.
+  const HOME = {x:556, y:1382.5}, BOX = {w:336, h:363};
+  const PATH = [
+    [0, -320, 2150, -4, .7], [.4, 420, 2085, -10, .72], [.52, 515, 1965, -62, .72],
+    [.7, 560, 1665, -76, .76], [.85, 705, 1425, -32, .86], [1, HOME.x, HOME.y, 0, 1],
+  ];
+  const frames = PATH.map(([offset, x, y, turn, size]) => ({offset, translate:`${(x - HOME.x) / BOX.w * 100}% ${(y - HOME.y) / BOX.h * 100}%`, rotate:turn + 'deg', scale:size}));
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const ready = () => portrait.matches && !reducedMotion.matches && hero.classList.contains('in-view') && document.visibilityState === 'visible' && !welcome.open;
+  // Hidden until its first entrance; with reduced motion it simply sits in the glass.
+  if(portrait.matches && !reducedMotion.matches) bug.style.opacity = 0;
+  (async () => {
+    for(;;){
+      if(!ready()){ await pause(600); continue; }
+      bug.style.opacity = '';
+      bug.classList.add('is-walking');
+      await bug.animate(frames, {duration:7000, easing:'linear', fill:'forwards'}).finished.catch(() => {});
+      bug.classList.remove('is-walking');
+      await pause(9000);
+      await bug.animate([{opacity:1}, {opacity:0}], {duration:600, fill:'forwards'}).finished;
+      bug.getAnimations().forEach(a => a.cancel());
+      bug.style.opacity = 0;
+      await pause(900);
+    }
+  })();
+}
+
+// ---------- Phone Save the date: now and then the card spins fast, then slows down so it can be read ----------
+{
+  const spin = document.querySelector('.card-spin');
+  const [front, back] = spin.querySelectorAll('.card-face');
+  const scene = spin.closest('.scene');
+  const TURNS = 3, DURATION = 3200, TILT = -23.62;
+  const ease = t => 1 - Math.pow(1 - t, 4);
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const ready = () => portrait.matches && !reducedMotion.matches && scene.classList.contains('in-view') && document.visibilityState === 'visible';
+  // Turns about the card's own long axis; the plain back shows while it faces away.
+  function show(angle){
+    spin.style.transform = angle ? `perspective(1600px) rotate(${TILT}deg) rotateY(${angle}deg) rotate(${-TILT}deg)` : '';
+    const facing = Math.cos(angle * Math.PI / 180) >= 0;
+    front.style.visibility = facing ? '' : 'hidden';
+    back.style.visibility = facing ? 'hidden' : 'visible';
+  }
+  const turn = () => new Promise(resolve => {
+    const start = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - start) / DURATION);
+      show(t < 1 ? ease(t) * TURNS * 360 : 0);
+      if(t < 1) requestAnimationFrame(step); else resolve();
+    };
+    requestAnimationFrame(step);
+  });
+  (async () => {
+    await pause(1500);
+    for(;;){
+      if(!ready()){ await pause(500); continue; }
+      await turn();
+      await pause(7000);
+    }
+  })();
+}
+
 // ---------- Finale: the kittens video plays only while it is on screen ----------
 {
   const video = document.querySelector('.finale video');
