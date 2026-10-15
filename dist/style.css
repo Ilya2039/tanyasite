@@ -412,6 +412,8 @@ nav span{font-size:16px;padding-left:5px}
 /* Venue and time written onto the pink save-the-date card (rotated with it) */
 .card-text{position:absolute;width:0;height:0;rotate:-29.7deg;transform-origin:0 0}
 .card-text span{position:absolute;left:0;bottom:-.24em;white-space:nowrap;font:italic 500 calc(min(100vw,1920px) * 27 / 1920) var(--serif);color:#2b0718;letter-spacing:.01em;font-variant-numeric:lining-nums}
+.ct-a{left:41.8%;top:54.07%}.ct-b{left:42.97%;top:57.69%}.ct-time{left:50.6%;top:56.75%}
+.glass-shimmer-2{display:none}
 .card-time span{font-size:calc(min(100vw,1920px) * 36 / 1920);font-style:normal}
 .venue-link{border-bottom:1px solid #ffffff40}
 .venue-link:hover{color:var(--pink)}
@@ -566,20 +568,52 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .scroll-arrow{font-size:13px}
   .section-link{position:static;display:block;width:max-content;margin:0 24px 28px;font-size:11px}
   .ticker{padding:10px 0}
-  .machine-screen{left:23%;top:24%;height:42%;padding:2%;border-radius:6px}
-  .slot-stage{padding:6% 0}
-  .reels{height:clamp(34px,9vw,54px);gap:4%}
-  .reel{border-width:1px;border-radius:4px}
-  .reel-symbol{font-size:8vw}
-  .slot-caption,.slot-hint{font-size:7px;letter-spacing:.04em;margin-bottom:5%}
-  .slot-hint{margin-top:5%;font-size:7px}
-  .lever-hint{left:85.1%;top:19%;padding:.4em .7em;animation-name:hint-nudge-up}
-  .lever-hint:before{left:50%;top:auto;bottom:-4px;translate:-50% 0;border:4px solid transparent;border-bottom:0;border-top-color:#ff8dbc}
-  .lever-guide{width:1px}
-  .invitation-result h3{font-size:clamp(12px,4.2vw,24px);margin:6% 0}
-  .invitation-result p:not(.jackpot-label){display:none}
-  .invitation-result .jackpot-label{font-size:7px}
-  .mobile-result-hint{display:block;font:8px var(--sans);color:#ffe0ed}
+  /* ----- Portrait art (assets/m/*): every scene is a tall 1125×2436 picture, effects re-placed on it ----- */
+  .stage{aspect-ratio:1125/2436}
+  .hero .mobile-copy,.dress .mobile-copy,.wishlist .mobile-copy,.program .mobile-copy{display:none}
+  .beam{width:40%}.beam-1{left:-8%}.beam-2{left:30%}.beam-3{left:68%}
+  .shooting{width:40%}
+  .flare-1{--x:7.9%!important;--y:48.9%!important;--s:22%!important}
+  .flare-2{--x:90.2%!important;--y:58%!important;--s:18%!important}
+  .glass-glow{left:49.8%;top:58.6%;width:52%}
+  .bubble{top:58%}
+  .rays{top:45%;width:330%}
+  .invitation .star-glow:nth-of-type(2){--x:40.3%!important;--y:30%!important;--s:9%!important}
+  .invitation .star-glow:nth-of-type(3){--x:49.8%!important;--y:28.9%!important;--s:12%!important}
+  .invitation .star-glow:nth-of-type(4){--x:59.8%!important;--y:30%!important;--s:9%!important}
+  .bulb{width:2.4%}
+  .machine-screen{left:18.5%;top:32.6%;width:63%;height:28%;padding:3% 4%;border-radius:16px;background:linear-gradient(160deg,#6b4c9ad9,#8d6aa6c7 50%,#5b46a2d9)}
+  .slot-stage{padding:2% 0}
+  .reels{height:21vw;gap:5%}
+  .reel{border-width:2px;border-radius:8px}
+  .reel-symbol{font-size:15vw}
+  .slot-caption,.slot-hint{font-size:11px;letter-spacing:.1em;margin-bottom:6%}
+  .slot-hint{margin-top:6%;font-size:12px;letter-spacing:.03em}
+  .invitation-result h3{font-size:clamp(24px,7.8vw,38px);margin:0 0 4%}
+  .invitation-result p:not(.jackpot-label){font-size:clamp(12px,3.55vw,17px);line-height:1.28;margin:0 0 3.5%}
+  .invitation-result br{display:none}
+  .invitation-result .result-note{font-size:clamp(11px,3.2vw,15px)!important}
+  .invitation-result .jackpot-label{font-size:9px}
+  .mobile-invitation{display:none!important}
+  .lever-hint{left:auto;right:2%;top:31.5%;translate:0 -100%;padding:.45em .8em;font-size:11px;animation-name:hint-bob}
+  .lever-hint:before{left:auto;right:16px;top:auto;bottom:-5px;translate:0 0;border:5px solid transparent;border-bottom:0;border-top-color:#ff8dbc}
+  .lever-guide{left:91.9%;top:40%;height:12%;width:2px}
+  .chip-one{clip-path:ellipse(12.7% 5.9% at 19.9% 26.2%)!important;transform-origin:19.9% 26.2%!important}
+  .chip-two{clip-path:ellipse(13.3% 6.1% at 82% 65.6%)!important;transform-origin:82% 65.6%!important}
+  .date .art-detail{background-image:url(assets/m/date.webp)!important}
+  .dress .art-detail{background-image:url(assets/m/dress.webp)!important}
+  .card-glow{left:48.8%;top:46.6%;width:80%}
+  .card-text{rotate:-25.5deg}
+  .card-text span{font-size:calc(100vw * 38 / 1125)}
+  .card-time span{font-size:calc(100vw * 50 / 1125)}
+  .ct-a{left:30.63%;top:50.36%}.ct-b{left:33.08%;top:52.72%}.ct-time{left:49.2%;top:52.9%}
+  .neon{clip-path:inset(21.5% 4% 69.5% 2%)!important}
+  .glass-shimmer{clip-path:inset(0 0 79% 0)!important}
+  .glass-shimmer-2{clip-path:inset(77% 0 0 0)}
+  .claw{left:26.67%;top:3.82%;width:41.87%;height:17.86%}
+  .claw-cable{left:48.1%;width:.7%;height:103.9%}
+  .claw-prize{left:23%;top:18.6%;width:54%;height:18.6%}
+  .hearts-front{left:13.33%;top:69.38%;width:73.33%;height:30.62%}
   .date-details{padding:32px 24px;gap:26px;grid-template-columns:1fr}
   .date-number{font-size:64px}
   .date-number em{font-size:40px}
@@ -590,13 +624,14 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .countdown{justify-self:stretch}
   .date-details dd{font-size:20px}
   .date-note{text-align:left;font-size:16px}
-  .prize-panel{position:static;aspect-ratio:auto;padding:18px 20px 4px;background:#f4b9cd}
-  .prize-card,.prize-status{position:static;width:auto}
+  .prize-panel{aspect-ratio:1125/2436}
+  .prize-card,.prize-status{left:5%;right:5%;width:auto;top:auto;bottom:3%}
   .prize-card{padding:18px;border-radius:16px}
-  .prize-title{font-size:24px}
+  .prize-card:not([hidden])~.prize-status{bottom:auto;top:61%}
+  .prize-title{font-size:22px}
   .prize-actions{gap:14px;margin-top:14px}
   .prize-split{margin-top:12px;font-size:13px}
-  .prize-status{padding:14px 18px;margin-bottom:10px;border-radius:16px;font-size:20px}
+  .prize-status{padding:14px 18px;border-radius:16px;font-size:17px}
   .my-bookings{justify-content:flex-start;padding:24px;gap:16px}
   .heart{font-size:42px}
   .my-bookings h3{font-size:22px;line-height:1.2}
@@ -624,6 +659,8 @@ input[type=text],input:not([type]),textarea{cursor:text}
   .finale h2 em{filter:none;animation:none}
   .my-bookings{animation:none}
 }
+@media(max-width:600px){.art-detail,.sheen{display:block}}
+@keyframes hint-bob{0%,100%{translate:0 -100%}50%{translate:0 -70%}}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}

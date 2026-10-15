@@ -4,6 +4,8 @@ if(location.hash) history.replaceState(null, '', location.pathname + location.se
 window.scrollTo(0, 0);
 window.addEventListener('load', () => { if(window.scrollY < 50 || document.querySelector('#welcome[open]')) window.scrollTo(0, 0); }, {once:true});
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+// Portrait phones get the tall artwork (assets/m/*), so effects placed in % need their own coordinates.
+const portrait = window.matchMedia('(max-width: 600px)');
 const isMobile = window.matchMedia('(max-width: 600px), (pointer: coarse) and (max-width: 900px)');
 const rand = (min, max) => min + Math.random() * (max - min);
 const pick = list => list[Math.floor(Math.random() * list.length)];
@@ -102,7 +104,7 @@ function makeSpan(className, vars, text){
 }
 const sparkleColors = {home:['#ffe1fa','#c9d4ff'], invitation:['#ead6ff','#ffc3df'], date:['#fa78b2','#ffd1e6'], program:['#ffffff','#ffc2d9'], 'dress-code':['#fff6d6','#ffffff'], wishlist:['#ffffff','#ffe2ec']};
 // Keep floating bits out of the wishlist claw's column (about 20–58% across).
-const clawFreeX = (min, max) => { let x; do x = rand(min, max); while(x > 20 && x < 58); return x; };
+const clawFreeX = (min, max) => { const [a, b] = portrait.matches ? [20, 74] : [20, 58]; let x; do x = rand(min, max); while(x > a && x < b); return x; };
 document.querySelectorAll('.sparkles').forEach(layer => {
   const symbols = layer.dataset.symbols.split(' ');
   const id = layer.closest('section').id;
@@ -114,15 +116,21 @@ document.querySelectorAll('.sparkles').forEach(layer => {
 // Twinkling stars only in the sky above the pink table.
 const twinkles = document.querySelector('.twinkles');
 for(let i=0;i<(isMobile.matches ? 18 : 60);i++){
-  const x = rand(1,99); const maxY = 54 + x * .2;
+  const x = rand(1,99); const maxY = portrait.matches ? 58 : 54 + x * .2;
   twinkles.append(makeSpan('tw',{x:x+'%', y:rand(2,maxY)+'%', s:rand(1.5,3.5)+'px', dur:rand(1.8,4.5)+'s', delay:-rand(0,4)+'s'}));
 }
 const bubbles = document.querySelector('.bubbles');
-for(let i=0;i<10;i++) bubbles.append(makeSpan('bubble',{x:rand(45,53)+'%', s:rand(.3,.7)+'%', dur:rand(2.5,4.5)+'s', delay:-rand(0,4)+'s', dx:rand(-12,12)+'px', rise:rand(40,90)+'px'}));
+for(let i=0;i<10;i++) bubbles.append(makeSpan('bubble',{x:(portrait.matches ? rand(44,56) : rand(45,53))+'%', s:rand(.3,.7)+'%', dur:rand(2.5,4.5)+'s', delay:-rand(0,4)+'s', dx:rand(-12,12)+'px', rise:rand(40,90)+'px'}));
 // Marquee bulbs around the machine, ordered as a loop for the chase.
 const bulbs = document.querySelector('.bulbs');
-const bulbY = [38.1,44.1,50.1,56,61.9,67.9];
-[...bulbY.slice().reverse().map(y => [20.15,y]), ...bulbY.map(y => [79.4,y])].forEach(([x,y],i) => bulbs.append(makeSpan('bulb',{x:x+'%', y:y+'%', i})));
+function placeBulbs(){
+  const [bulbY, left, right] = portrait.matches
+    ? [[41.26,43.92,46.59,49.22,51.89,54.52,57.06], 12.8, 86.4]
+    : [[38.1,44.1,50.1,56,61.9,67.9], 20.15, 79.4];
+  bulbs.replaceChildren();
+  [...bulbY.slice().reverse().map(y => [left,y]), ...bulbY.map(y => [right,y])].forEach(([x,y],i) => bulbs.append(makeSpan('bulb',{x:x+'%', y:y+'%', i})));
+}
+placeBulbs(); portrait.addEventListener('change', placeBulbs);
 // Hearts floating up from the pile.
 const rising = document.querySelector('.rising');
 for(let i=0;i<(isMobile.matches ? 5 : 16);i++) rising.append(makeSpan('rise',{x:clawFreeX(2,95)+'%', size:rand(18,46)+'px', dur:rand(7,13)+'s', delay:-rand(0,13)+'s', dx:rand(-40,40)+'px', c:pick(['#ff2e63','#ff5c8a','#ffffff','#ff8fb1','#e8124f'])}, '♥'));
@@ -176,10 +184,10 @@ requestAnimationFrame(tick);
 // Paparazzi flashes over the outfit photos while the dress code is on screen.
 const dress = document.querySelector('#dress-code');
 const flashes = document.querySelector('.flashes');
-const photoAreas = [[3,38,56,92],[42,71,51,92]];
+const photoAreas = () => portrait.matches ? [[3,48,47,66],[50,95,47,64]] : [[3,38,56,92],[42,71,51,92]];
 (function flashLoop(){
   if(dress.classList.contains('in-view') && !reducedMotion.matches && document.visibilityState === 'visible'){
-    const [x0,x1,y0,y1] = pick(photoAreas);
+    const [x0,x1,y0,y1] = pick(photoAreas());
     const flash = makeSpan('flash',{x:rand(x0,x1)+'%', y:rand(y0,y1)+'%', s:rand(6,11)+'%'});
     flashes.append(flash); setTimeout(() => flash.remove(), 750);
   }
@@ -285,23 +293,32 @@ welcome.addEventListener('cancel', event => { if(!accepted) event.preventDefault
 // ---------- The lever: drag the knob down like a real one-armed bandit ----------
 const leverArm = document.querySelector('.lever-arm');
 const leverKnob = document.querySelector('.lever-knob');
-// Geometry in the SVG's 160×90 units (1 unit = 1/1.6 % of width, 1/0.9 % of height).
-const ROOT = {x:84.4 * 1.6, y:48.6 * .9};
-const REST = {x:85.1 * 1.6, y:30.2 * .9};
-const ARM = Math.hypot(REST.x - ROOT.x, REST.y - ROOT.y);
+// Geometry in the SVG's own units: 160×90 on the wide art, 100×216.5 on the tall phone art.
+const leverSvg = document.querySelector('.lever-svg');
+let GEO;
+function leverGeometry(){
+  const tall = portrait.matches;
+  const vb = tall ? {w:100, h:216.53} : {w:160, h:90};
+  const at = (x, y) => ({x:x * vb.w / 100, y:y * vb.h / 100});
+  const root = tall ? at(92, 46.3) : at(84.4, 48.6), rest = tall ? at(91.8, 36) : at(85.1, 30.2);
+  GEO = {vb, root, rest, arm:Math.hypot(rest.x - root.x, rest.y - root.y), radius:tall ? 3.56 : 3.52, width:tall ? 2.2 : 1.5, travel:tall ? .2 : .36};
+  leverSvg.setAttribute('viewBox', `0 0 ${vb.w} ${vb.h}`);
+}
+leverGeometry();
 const MAX_ANGLE = 150 * Math.PI / 180;
 let leverPos = 0, leverVel = 0, leverAnim = 0, drag = null;
 // The knob travels straight down (the arm tips toward the viewer), then springs back up.
 function renderLever(p){
   const theta = p * MAX_ANGLE;
   const near = Math.max(0, Math.sin(theta));
-  const knob = {x:ROOT.x + (REST.x - ROOT.x) * Math.cos(theta), y:ROOT.y - Math.cos(theta) * ARM};
-  const radius = 3.52 * (1 + .32 * near);
-  const w = 1.5 * (1 + .25 * near) / 2;
-  leverArm.setAttribute('points', `${ROOT.x - w},${ROOT.y} ${ROOT.x + w},${ROOT.y} ${knob.x + w},${knob.y} ${knob.x - w},${knob.y}`);
+  const {root, rest, arm, vb} = GEO;
+  const knob = {x:root.x + (rest.x - root.x) * Math.cos(theta), y:root.y - Math.cos(theta) * arm};
+  const radius = GEO.radius * (1 + .32 * near);
+  const w = GEO.width * (1 + .25 * near) / 2;
+  leverArm.setAttribute('points', `${root.x - w},${root.y} ${root.x + w},${root.y} ${knob.x + w},${knob.y} ${knob.x - w},${knob.y}`);
   leverKnob.setAttribute('cx', knob.x); leverKnob.setAttribute('cy', knob.y); leverKnob.setAttribute('r', radius);
-  lever.style.left = (knob.x / 1.6) + '%'; lever.style.top = (knob.y / .9) + '%';
-  lever.style.width = (radius * 2 / 1.6) + '%';
+  lever.style.left = (knob.x / vb.w * 100) + '%'; lever.style.top = (knob.y / vb.h * 100) + '%';
+  lever.style.width = (radius * 2 / vb.w * 100) + '%';
 }
 function stopLeverAnim(){ cancelAnimationFrame(leverAnim); leverAnim = 0; }
 function setLever(p){ leverPos = p; renderLever(p); }
@@ -343,7 +360,7 @@ lever.addEventListener('pointerdown', event => {
   event.preventDefault();
   lever.setPointerCapture(event.pointerId);
   stopLeverAnim();
-  const travel = machine.getBoundingClientRect().height * .36;
+  const travel = machine.getBoundingClientRect().height * GEO.travel;
   drag = {id:event.pointerId, y:event.clientY, from:leverPos, travel, moved:0, notch:0};
   machine.classList.add('is-pulling');
 });
@@ -380,6 +397,7 @@ setInterval(() => {
   tweenLever(.14, 260).then(springBack);
 }, 3200);
 renderLever(0);
+portrait.addEventListener('change', () => { leverGeometry(); renderLever(leverPos); });
 populateReels(); welcome.showModal();
 
 // ---------- Wishlist claw: the empty claw dives into the hearts, pulls a prize out, guests can book it ----------
@@ -401,7 +419,8 @@ populateReels(); welcome.showModal();
   const dialog = document.querySelector('#book-dialog');
   const dialogError = dialog.querySelector('.book-error');
   const mine = scene.querySelector('.my-bookings');
-  const DEPTH = '0 45%';
+  // How far the rig drops so the claws bury into the hearts (in % of the scene's height).
+  const depth = () => portrait.matches ? '0 61%' : '0 45%';
   const HOLD = 7000;
   const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
   const ready = () => scene.classList.contains('in-view') && document.visibilityState === 'visible';
@@ -614,13 +633,14 @@ populateReels(); welcome.showModal();
       await pause(250);
       // Open the empty claw and send it down into the hearts.
       await grip(16, 420);
-      await move(rig, [{translate:'0 0'},{translate:DEPTH}], 1500);
+      const DEPTH = depth();
+      await move(rig, [{translate:'0 0'},{translate:DEPTH}], portrait.matches ? 2100 : 1500);
       item.replaceWith(next); item = next;
       await grip(0, 380);
       await grip(-2, 120); await grip(0, 160);
       // Pull it out and lift it up, with a little wobble.
       move(item, [{rotate:'0deg'},{rotate:'-3deg', offset:.3},{rotate:'2deg', offset:.7},{rotate:'0deg'}], 1700);
-      await move(rig, [{translate:DEPTH},{translate:'0 0'}], 1700, 'cubic-bezier(.45,0,.25,1)');
+      await move(rig, [{translate:DEPTH},{translate:'0 0'}], portrait.matches ? 2300 : 1700, 'cubic-bezier(.45,0,.25,1)');
       current = prize;
     }
   })();
