@@ -649,33 +649,24 @@ populateReels(); welcome.showModal();
   })();
 }
 
-// ---------- Phone hero: the scorpion crawls across the table, climbs the glass and drops in ----------
+// ---------- Phone hero: a video of the scorpion crawling into the glass plays over the art ----------
 {
-  const bug = document.querySelector('.scorpion');
-  const hero = bug.closest('.scene');
-  // Path of the sprite's centre in art pixels (1125×2436), its turn and size; it ends where the art had it.
-  const HOME = {x:556, y:1382.5}, BOX = {w:336, h:363};
-  const PATH = [
-    [0, -320, 2150, -4, .7], [.4, 420, 2085, -10, .72], [.52, 515, 1965, -62, .72],
-    [.7, 560, 1665, -76, .76], [.85, 705, 1425, -32, .86], [1, HOME.x, HOME.y, 0, 1],
-  ];
-  const frames = PATH.map(([offset, x, y, turn, size]) => ({offset, translate:`${(x - HOME.x) / BOX.w * 100}% ${(y - HOME.y) / BOX.h * 100}%`, rotate:turn + 'deg', scale:size}));
+  const video = document.querySelector('.hero-video');
+  const hero = video.closest('.scene');
   const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
   const ready = () => portrait.matches && !reducedMotion.matches && hero.classList.contains('in-view') && document.visibilityState === 'visible' && !welcome.open;
-  // Hidden until its first entrance; with reduced motion it simply sits in the glass.
-  if(portrait.matches && !reducedMotion.matches) bug.style.opacity = 0;
+  // The video only loads on phones; it ends on the scorpion sitting in the glass and holds that frame.
   (async () => {
+    while(!portrait.matches) await pause(1000);
+    video.src = video.dataset.src;
+    // With reduced motion the scorpion just sits in the glass: show the last frame.
+    if(reducedMotion.matches){ video.preload = 'auto'; video.addEventListener('loadedmetadata', () => { video.currentTime = video.duration - .05; }, {once:true}); return; }
     for(;;){
-      if(!ready()){ await pause(600); continue; }
-      bug.style.opacity = '';
-      bug.classList.add('is-walking');
-      await bug.animate(frames, {duration:7000, easing:'linear', fill:'forwards'}).finished.catch(() => {});
-      bug.classList.remove('is-walking');
-      await pause(9000);
-      await bug.animate([{opacity:1}, {opacity:0}], {duration:600, fill:'forwards'}).finished;
-      bug.getAnimations().forEach(a => a.cancel());
-      bug.style.opacity = 0;
-      await pause(900);
+      if(!ready()){ await pause(500); continue; }
+      video.currentTime = 0;
+      try { await video.play(); } catch { await pause(2000); continue; }
+      await new Promise(resolve => video.addEventListener('ended', resolve, {once:true}));
+      await pause(12000);
     }
   })();
 }
