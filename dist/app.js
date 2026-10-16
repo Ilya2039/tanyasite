@@ -231,7 +231,10 @@ const tracks = [...document.querySelectorAll('.reel-track')];
 let accepted = false;
 let spinning = false;
 let guest = { name: '', salutation: 'Дорогая' };
-try { const saved = JSON.parse(sessionStorage.getItem('birthday-guest')); if(saved && typeof saved.name === 'string'){nameInput.value = saved.name.slice(0,32); if(saved.salutation === 'Дорогой')nameForm.elements.salutation.value = 'Дорогой';} } catch {}
+try { const saved = JSON.parse(sessionStorage.getItem('birthday-guest')); if(saved && typeof saved.name === 'string') nameInput.value = saved.name.slice(0,32); } catch {}
+// Ilya and Misha get «Дорогой», everyone else «Дорогая».
+const MALE = /^(илья|илюша|илюшка|илюха|илюх|ilya|ilia|ilja|миша|мишаня|мишка|михаил|misha|mikhail|michael)$/;
+const salutationFor = name => MALE.test(name.toLowerCase().replace(/ё/g, 'е').split(/[\s,.!-]+/)[0]) ? 'Дорогой' : 'Дорогая';
 
 function populateReels(){
   tracks.forEach((track,index) => {
@@ -282,7 +285,7 @@ function openCurtain(){
 nameForm.addEventListener('submit', event => {
   event.preventDefault(); const name = nameInput.value.trim().replace(/\s+/g,' ');
   if(!name){ nameInput.setCustomValidity('Напиши своё имя'); nameInput.reportValidity(); return; }
-  nameInput.setCustomValidity(''); guest = {name, salutation:nameForm.elements.salutation.value === 'Дорогой' ? 'Дорогой' : 'Дорогая'};
+  nameInput.setCustomValidity(''); guest = {name, salutation:salutationFor(name)};
   document.querySelectorAll('.personal-greeting').forEach(el => { const name = document.createElement('b'); name.textContent = `${guest.name}!`; el.replaceChildren(`${guest.salutation} `, name); });
   scrollText.textContent = `${guest.name}, твоё приглашение`;
   try { sessionStorage.setItem('birthday-guest', JSON.stringify(guest)); } catch {}
