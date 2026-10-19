@@ -709,39 +709,19 @@ populateReels(); welcome.showModal();
   })();
 }
 
-// ---------- Finale: the kittens and the candles videos take turns, cross-fading, while on screen ----------
+// ---------- Finale: the candles video plays only while it is on screen ----------
 {
-  const videos = [...document.querySelectorAll('.finale video')];
+  const video = document.querySelector('.finale video');
   const sound = document.querySelector('.finale-sound');
-  const FADE = 1;
-  let current = 0, visible = false, switching = false;
-  const playing = () => videos[current];
-  function swap(){
-    switching = true;
-    const from = playing(), to = videos[current = (current + 1) % videos.length];
-    to.currentTime = 0;
-    to.play().catch(() => {});
-    to.classList.add('is-on'); from.classList.remove('is-on');
-    setTimeout(() => { from.pause(); switching = false; }, FADE * 1000);
-  }
-  videos.forEach(video => {
-    // Start the next clip a moment before this one ends so they overlap during the fade.
-    video.addEventListener('timeupdate', () => {
-      if(video === playing() && !switching && video.duration && video.duration - video.currentTime < FADE) swap();
-    });
-    video.addEventListener('ended', () => { if(video === playing() && !switching) swap(); });
-  });
   new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting && !reducedMotion.matches;
-    if(visible){ videos.forEach(v => { v.preload = 'auto'; }); playing().play().catch(() => {}); }
-    else videos.forEach(v => v.pause());
-  }, {threshold:.25}).observe(videos[0].parentElement);
+    if(entry.isIntersecting && !reducedMotion.matches) video.play().catch(() => {}); else video.pause();
+  }, {threshold:.25}).observe(video);
   sound.addEventListener('click', () => {
-    const muted = !videos[0].muted;
-    videos.forEach(v => { v.muted = muted; });
-    sound.setAttribute('aria-pressed', String(!muted));
-    sound.lastChild.textContent = muted ? ' Со звуком' : ' Без звука';
-    if(!muted) playing().play().catch(() => {});
+    video.muted = !video.muted;
+    sound.setAttribute('aria-pressed', String(!video.muted));
+    sound.lastChild.textContent = video.muted ? ' Со звуком' : ' Без звука';
+    if(!video.muted) video.play().catch(() => {});
   });
 }
+
 
